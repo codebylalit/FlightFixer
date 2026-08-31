@@ -143,6 +143,7 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
   const [copied, setCopied] = useState(false);
   const [infoModalOpen, setInfoModalOpen] = useState(false);
   const [infoModalTab, setInfoModalTab] = useState<'about' | 'rights' | 'how-it-works'>('about');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (claimDraft && isDraftOpen) { setDraftSubject(claimDraft.subject); setDraftBody(claimDraft.letterBody); }
@@ -398,13 +399,14 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
               </div>
             )}
 
-            {/* Right: Pill Button */}
+            {/* Right: Scan ticket + Mobile Hamburger Button */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
               <button
                 type="button"
                 onClick={() => setScanModalOpen(true)}
+                className="hidden xs:inline-flex"
                 style={{
-                  padding: '8px 18px',
+                  padding: '8px 16px',
                   borderRadius: 9999,
                   background: 'var(--navy)',
                   color: '#FFFFFF',
@@ -415,7 +417,6 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                   boxShadow: '0 2px 10px rgba(26, 35, 50, 0.25)',
                   transition: 'all 160ms ease',
                   letterSpacing: '-0.01em',
-                  display: 'inline-flex',
                   alignItems: 'center',
                   gap: 7,
                 }}
@@ -423,10 +424,72 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                 onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(26,35,50,0.25)'; }}
               >
                 <Camera style={{ width: 14, height: 14 }} />
-                Scan ticket
+                <span>Scan ticket</span>
+              </button>
+
+              {/* Hamburger Button for Mobile */}
+              <button
+                id="mobile-hamburger-btn"
+                type="button"
+                onClick={() => setMobileMenuOpen(prev => !prev)}
+                className="sm:hidden flex items-center justify-center"
+                style={{
+                  width: 36, height: 36,
+                  borderRadius: 9999,
+                  background: 'rgba(255,255,255,0.80)',
+                  border: '1px solid rgba(148,163,184,0.25)',
+                  color: 'var(--text)',
+                  cursor: 'pointer',
+                }}
+                title="Toggle navigation menu"
+              >
+                {mobileMenuOpen ? <X style={{ width: 18, height: 18 }} /> : <Menu style={{ width: 18, height: 18 }} />}
               </button>
             </div>
           </nav>
+
+          {/* Mobile Drawer Overlay */}
+          {mobileMenuOpen && (
+            <div
+              id="mobile-nav-drawer"
+              className="sm:hidden absolute top-16 left-4 right-4 bg-white/95 backdrop-blur-2xl border border-white/90 rounded-2xl p-4 shadow-xl z-50 flex flex-col gap-2.5 animate-fade-in"
+            >
+              <button
+                type="button"
+                onClick={() => { openInfo('about'); setMobileMenuOpen(false); }}
+                className="flex items-center gap-2.5 p-2.5 rounded-xl hover:bg-slate-100/70 text-left text-xs font-semibold text-slate-800 transition-colors"
+              >
+                <Info style={{ width: 15, height: 15, color: 'var(--sky)' }} />
+                <span>About FlightClaims</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => { openInfo('rights'); setMobileMenuOpen(false); }}
+                className="flex items-center gap-2.5 p-2.5 rounded-xl hover:bg-slate-100/70 text-left text-xs font-semibold text-slate-800 transition-colors"
+              >
+                <Shield style={{ width: 15, height: 15, color: 'var(--amber)' }} />
+                <span>Passenger Rights Guide</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => { openInfo('how-it-works'); setMobileMenuOpen(false); }}
+                className="flex items-center gap-2.5 p-2.5 rounded-xl hover:bg-slate-100/70 text-left text-xs font-semibold text-slate-800 transition-colors"
+              >
+                <Sparkles style={{ width: 15, height: 15, color: 'var(--success)' }} />
+                <span>How It Works</span>
+              </button>
+              <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+                <button
+                  type="button"
+                  onClick={() => { setScanModalOpen(true); setMobileMenuOpen(false); }}
+                  className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl bg-slate-900 text-white text-xs font-semibold shadow-xs"
+                >
+                  <Camera style={{ width: 15, height: 15 }} />
+                  <span>Scan Ticket / PDF</span>
+                </button>
+              </div>
+            </div>
+          )}
         </header>
 
         {/* ── Content ──────────────────────────────────────────── */}
