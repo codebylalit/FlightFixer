@@ -3,7 +3,7 @@ import {
   Clock, Ban, UserX, GitFork, Plane, ArrowRight,
   Sparkles, Check, Copy, Download, X, ChevronLeft,
   Mail, User, Hash, Calendar, Loader2, Shield, FileText,
-  Search, FileUp, Upload, Camera
+  Search, FileUp, Upload, Camera, Menu
 } from 'lucide-react';
 
 // ─── Hook: responsive grid switching ─────────────────────────
@@ -149,6 +149,7 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
 }) => {
   const [step, setStep] = useState(1);
   const isMobile = useIsMobile(480);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [heroSearch, setHeroSearch] = useState('');
   const [draftSubject, setDraftSubject] = useState('');
   const [draftBody, setDraftBody] = useState('');
@@ -159,6 +160,9 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
   useEffect(() => {
     if (claimDraft && isDraftOpen) { setDraftSubject(claimDraft.subject); setDraftBody(claimDraft.letterBody); }
   }, [claimDraft, isDraftOpen]);
+
+  // Close mobile menu when navigating between steps
+  useEffect(() => { setMobileMenuOpen(false); }, [step]);
 
   const airlineEmail = getAirlineEmail(flightCase.airline);
   const hasAmount = !!analysis.financialRecovery.formattedRange;
@@ -311,139 +315,190 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
           padding: '14px 20px 0',
           pointerEvents: 'none',
         }}>
-          <nav style={{
-            pointerEvents: 'auto',
-            width: '100%',
-            maxWidth: 1040,
-            height: 52,
-            borderRadius: 9999,
-            background: 'rgba(255, 255, 255, 0.55)',
-            backdropFilter: 'blur(24px) saturate(1.6)',
-            WebkitBackdropFilter: 'blur(24px) saturate(1.6)',
-            border: '1px solid rgba(255, 255, 255, 0.85)',
-            boxShadow: '0 4px 24px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: '0 8px 0 16px',
-            transition: 'all 200ms ease',
-            minWidth: 0,
-          }}>
-            {/* Left: Brand */}
-            {step > 1 ? (
-              <button
-                type="button"
-                onClick={() => setStep(s => s - 1)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 5,
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  color: 'var(--text-2)',
-                  fontSize: 13,
-                  fontWeight: 600,
-                  padding: '4px 10px',
-                  borderRadius: 9999,
-                  transition: 'background 150ms',
-                }}
-                onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,0,0,0.05)'}
-                onMouseLeave={e => e.currentTarget.style.background = 'none'}
-              >
-                <ChevronLeft style={{ width: 15, height: 15 }} /> Back
-              </button>
-            ) : (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 9, minWidth: 0 }}>
-                <div style={{
-                  width: 28,
-                  height: 28,
-                  borderRadius: 9,
-                  background: 'var(--navy)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 2px 8px rgba(26, 35, 50, 0.22)',
-                  flexShrink: 0,
-                }}>
-                  <Plane style={{ width: 13, height: 13, color: '#F9F8F6', transform: 'rotate(-45deg)' }} />
+          {/* Wrapper — gives dropdown a positioned anchor */}
+          <div style={{ position: 'relative', width: '100%', maxWidth: 1040, pointerEvents: 'none' }}>
+
+            <nav style={{
+              pointerEvents: 'auto',
+              width: '100%',
+              height: 52,
+              borderRadius: 9999,
+              background: 'rgba(255, 255, 255, 0.55)',
+              backdropFilter: 'blur(24px) saturate(1.6)',
+              WebkitBackdropFilter: 'blur(24px) saturate(1.6)',
+              border: '1px solid rgba(255, 255, 255, 0.85)',
+              boxShadow: '0 4px 24px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '0 8px 0 16px',
+              transition: 'all 200ms ease',
+              minWidth: 0,
+            }}>
+
+              {/* Left: Back button (steps 2-3) or Brand logo (step 1) */}
+              {step > 1 ? (
+                <button
+                  type="button"
+                  onClick={() => setStep(s => s - 1)}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 5,
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    color: 'var(--text-2)', fontSize: 13, fontWeight: 600,
+                    padding: '4px 10px', borderRadius: 9999, transition: 'background 150ms',
+                    flexShrink: 0,
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,0,0,0.05)'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'none'}
+                >
+                  <ChevronLeft style={{ width: 15, height: 15 }} /> Back
+                </button>
+              ) : (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 9, minWidth: 0, flexShrink: 0 }}>
+                  <div style={{
+                    width: 28, height: 28, borderRadius: 9, background: 'var(--navy)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    boxShadow: '0 2px 8px rgba(26, 35, 50, 0.22)', flexShrink: 0,
+                  }}>
+                    <Plane style={{ width: 13, height: 13, color: '#F9F8F6', transform: 'rotate(-45deg)' }} />
+                  </div>
+                  {/* Brand name — always visible on all screen sizes */}
+                  <span className="ff-display" style={{ fontSize: 18, color: 'var(--text)', fontStyle: 'italic', fontWeight: 400, letterSpacing: '-0.02em', lineHeight: 1, whiteSpace: 'nowrap' }}>
+                    Flight<span style={{ fontStyle: 'normal', fontWeight: 600 }}>Claims</span>
+                  </span>
                 </div>
-                <span className="ff-display ff-nav-brand-text" style={{ fontSize: 18, color: 'var(--text)', fontStyle: 'italic', fontWeight: 400, letterSpacing: '-0.02em', lineHeight: 1 }}>
-                  Flight<span style={{ fontStyle: 'normal', fontWeight: 600 }}>Claims</span>
-                </span>
+              )}
+
+              {/* Center: Nav links (desktop) or Step dots (steps 2-3) */}
+              {step === 1 ? (
+                <div style={{ alignItems: 'center', gap: 24 }} className="ff-nav-links">
+                  <button type="button" onClick={() => openInfo('about')}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--text-2)', fontWeight: 500, padding: '4px 8px', borderRadius: 6, transition: 'color 140ms' }}
+                    onMouseEnter={e => e.currentTarget.style.color = 'var(--text)'}
+                    onMouseLeave={e => e.currentTarget.style.color = 'var(--text-2)'}
+                  >About</button>
+                  <button type="button" onClick={() => openInfo('rights')}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--text-2)', fontWeight: 500, padding: '4px 8px', borderRadius: 6, transition: 'color 140ms' }}
+                    onMouseEnter={e => e.currentTarget.style.color = 'var(--text)'}
+                    onMouseLeave={e => e.currentTarget.style.color = 'var(--text-2)'}
+                  >Passenger Rights</button>
+                  <button type="button" onClick={() => openInfo('how-it-works')}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--text-2)', fontWeight: 500, padding: '4px 8px', borderRadius: 6, transition: 'color 140ms' }}
+                    onMouseEnter={e => e.currentTarget.style.color = 'var(--text)'}
+                    onMouseLeave={e => e.currentTarget.style.color = 'var(--text-2)'}
+                  >How It Works</button>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Steps current={step} />
+                  <span style={{ fontSize: 11.5, color: 'var(--text-3)', fontWeight: 500 }}>Step {step} of 3</span>
+                </div>
+              )}
+
+              {/* Right: Scan Ticket + Hamburger (mobile only) */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+                {/* Scan ticket pill */}
+                <button
+                  type="button"
+                  onClick={() => setScanModalOpen(true)}
+                  style={{
+                    padding: '8px 14px', borderRadius: 9999,
+                    background: 'var(--navy)', color: '#FFFFFF',
+                    fontSize: 13, fontWeight: 600, border: 'none', cursor: 'pointer',
+                    boxShadow: '0 2px 10px rgba(26, 35, 50, 0.25)',
+                    transition: 'all 160ms ease', letterSpacing: '-0.01em',
+                    display: 'inline-flex', alignItems: 'center', gap: 6,
+                    minHeight: 36, minWidth: 36, justifyContent: 'center',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.03)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(26,35,50,0.32)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(26,35,50,0.25)'; }}
+                >
+                  <Camera style={{ width: 14, height: 14 }} />
+                  <span className="ff-nav-cta-text">Scan ticket</span>
+                </button>
+
+                {/* Hamburger — hidden on desktop, shown on mobile via CSS */}
+                <button
+                  id="mobile-menu-btn"
+                  type="button"
+                  className="ff-hamburger-btn"
+                  onClick={() => setMobileMenuOpen(v => !v)}
+                  aria-label="Open menu"
+                  aria-expanded={mobileMenuOpen}
+                  style={{
+                    width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+                    border: '1px solid rgba(255,255,255,0.70)',
+                    background: mobileMenuOpen ? 'rgba(26,35,50,0.10)' : 'rgba(255,255,255,0.65)',
+                    cursor: 'pointer',
+                    alignItems: 'center', justifyContent: 'center',
+                    color: 'var(--text)', transition: 'background 150ms, transform 150ms',
+                  }}
+                >
+                  {mobileMenuOpen
+                    ? <X style={{ width: 16, height: 16 }} />
+                    : <Menu style={{ width: 16, height: 16 }} />}
+                </button>
               </div>
+            </nav>
+
+            {/* ── Mobile dropdown menu ─────────────────────────── */}
+            {mobileMenuOpen && (
+              <>
+                {/* Backdrop — closes menu on outside tap */}
+                <div
+                  onClick={() => setMobileMenuOpen(false)}
+                  style={{ position: 'fixed', inset: 0, zIndex: 48, pointerEvents: 'auto' }}
+                />
+                {/* Dropdown card */}
+                <div
+                  className="ff-fadeup"
+                  style={{
+                    position: 'absolute',
+                    top: 60,
+                    right: 0,
+                    width: 230,
+                    borderRadius: 18,
+                    background: 'rgba(255, 255, 255, 0.97)',
+                    backdropFilter: 'blur(28px) saturate(1.6)',
+                    WebkitBackdropFilter: 'blur(28px) saturate(1.6)',
+                    border: '1px solid rgba(255, 255, 255, 0.85)',
+                    boxShadow: '0 12px 40px rgba(0,0,0,0.12), 0 3px 10px rgba(0,0,0,0.06)',
+                    pointerEvents: 'auto',
+                    zIndex: 49,
+                    padding: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 2,
+                    overflow: 'hidden',
+                  }}
+                >
+                  {([
+                    { tab: 'about'        as const, label: 'About FlightClaims' },
+                    { tab: 'rights'       as const, label: 'Passenger Rights'   },
+                    { tab: 'how-it-works' as const, label: 'How It Works'       },
+                  ]).map(item => (
+                    <button
+                      key={item.tab}
+                      type="button"
+                      onClick={() => { openInfo(item.tab); setMobileMenuOpen(false); }}
+                      style={{
+                        display: 'flex', alignItems: 'center', width: '100%',
+                        padding: '12px 14px', borderRadius: 11,
+                        border: 'none', background: 'none', cursor: 'pointer',
+                        fontSize: 14, fontWeight: 600, color: 'var(--text)',
+                        textAlign: 'left', transition: 'background 140ms',
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,0,0,0.04)'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'none'}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+              </>
             )}
 
-            {/* Center: Nav links or Step indicator */}
-            {step === 1 ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 24 }} className="hidden sm:flex">
-                <button
-                  type="button"
-                  onClick={() => openInfo('about')}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--text-2)', fontWeight: 500, padding: '4px 8px', borderRadius: 6, transition: 'color 140ms' }}
-                  onMouseEnter={e => e.currentTarget.style.color = 'var(--text)'}
-                  onMouseLeave={e => e.currentTarget.style.color = 'var(--text-2)'}
-                >
-                  About
-                </button>
-                <button
-                  type="button"
-                  onClick={() => openInfo('rights')}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--text-2)', fontWeight: 500, padding: '4px 8px', borderRadius: 6, transition: 'color 140ms' }}
-                  onMouseEnter={e => e.currentTarget.style.color = 'var(--text)'}
-                  onMouseLeave={e => e.currentTarget.style.color = 'var(--text-2)'}
-                >
-                  Passenger Rights
-                </button>
-                <button
-                  type="button"
-                  onClick={() => openInfo('how-it-works')}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--text-2)', fontWeight: 500, padding: '4px 8px', borderRadius: 6, transition: 'color 140ms' }}
-                  onMouseEnter={e => e.currentTarget.style.color = 'var(--text)'}
-                  onMouseLeave={e => e.currentTarget.style.color = 'var(--text-2)'}
-                >
-                  How It Works
-                </button>
-              </div>
-            ) : (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <Steps current={step} />
-                <span style={{ fontSize: 11.5, color: 'var(--text-3)', fontWeight: 500 }}>Step {step} of 3</span>
-              </div>
-            )}
-
-            {/* Right: Pill Button */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
-              <button
-                type="button"
-                onClick={() => setScanModalOpen(true)}
-                style={{
-                  padding: '8px 14px',
-                  borderRadius: 9999,
-                  background: 'var(--navy)',
-                  color: '#FFFFFF',
-                  fontSize: 13,
-                  fontWeight: 600,
-                  border: 'none',
-                  cursor: 'pointer',
-                  boxShadow: '0 2px 10px rgba(26, 35, 50, 0.25)',
-                  transition: 'all 160ms ease',
-                  letterSpacing: '-0.01em',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 6,
-                  minHeight: 36,
-                  minWidth: 36,
-                  justifyContent: 'center',
-                }}
-                onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.03)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(26,35,50,0.32)'; }}
-                onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(26,35,50,0.25)'; }}
-              >
-                <Camera style={{ width: 14, height: 14 }} />
-                <span className="ff-nav-cta-text">Scan ticket</span>
-              </button>
-            </div>
-          </nav>
+          </div>
         </header>
 
         {/* ── Content ──────────────────────────────────────────── */}

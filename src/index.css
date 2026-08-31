@@ -74,6 +74,13 @@
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+/* Hamburger icon: hidden on desktop, shown on mobile by media query */
+.ff-hamburger-btn { display: none; }
+
+/* Desktop nav links: hidden on mobile (default), shown above 640px.
+   Strictly mutually exclusive with .ff-hamburger-btn */
+.ff-nav-links { display: none; }
+
 /* ─── Cards ─────────────────────────────────────────────────── */
 
 /* The main floating wizard card */
@@ -313,11 +320,23 @@ html, body { overflow-x: hidden; max-width: 100%; }
   }
 }
 
+/* ── Desktop: show nav links, keep hamburger hidden ──────── */
+@media (min-width: 641px) {
+  .ff-nav-links { display: flex; }
+}
+
+/* ── At sm breakpoint (≤ 640px): center nav links are hidden;
+   show hamburger so users can still reach About / Rights / How It Works */
+@media (max-width: 640px) {
+  .ff-hamburger-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 /* ── Small mobile (≤ 480px) ──────────────────────────────── */
 @media (max-width: 480px) {
-
-  /* ── Navbar brand text: hide label, keep icon ── */
-  .ff-nav-brand-text { display: none !important; }
 
   /* ── Navbar CTA "Scan ticket" text: hide text, keep icon ── */
   .ff-nav-cta-text   { display: none !important; }
