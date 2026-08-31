@@ -86,7 +86,6 @@ export const AirportSearch: React.FC<AirportSearchProps> = ({
             background: 'rgba(201,221,234,0.22)',
             border: '1px solid rgba(157,189,212,0.30)',
             boxShadow: '0 1px 4px rgba(23,32,51,0.04)',
-            minHeight: 44,
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
@@ -112,14 +111,14 @@ export const AirportSearch: React.FC<AirportSearchProps> = ({
             type="button"
             onClick={handleClear}
             style={{
-              flexShrink: 0, width: 32, height: 32, borderRadius: 7, border: 'none',
+              flexShrink: 0, padding: 5, borderRadius: 7, border: 'none',
               background: 'rgba(148,163,184,0.14)', color: 'var(--text-2)', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               transition: 'background 140ms',
             }}
             title="Clear selected airport"
           >
-            <X style={{ width: 14, height: 14 }} />
+            <X style={{ width: 13, height: 13 }} />
           </button>
         </div>
       ) : (
@@ -136,7 +135,7 @@ export const AirportSearch: React.FC<AirportSearchProps> = ({
             placeholder={placeholder}
             className="ff-input"
             style={{
-              paddingLeft: 30, paddingRight: 30, minHeight: 42,
+              paddingLeft: 30, paddingRight: 30,
               borderColor: error ? '#ef9a9a' : undefined,
               boxShadow: error ? '0 0 0 3px rgba(239,154,154,0.18)' : undefined,
             }}
@@ -162,7 +161,7 @@ export const AirportSearch: React.FC<AirportSearchProps> = ({
             border: '1px solid rgba(255,255,255,0.70)',
             borderRadius: 14,
             boxShadow: '0 8px 32px rgba(23,32,51,0.12)',
-            maxHeight: 240, overflowY: 'auto',
+            maxHeight: 220, overflowY: 'auto',
           }}
         >
           {results.length > 0 ? (
@@ -173,7 +172,7 @@ export const AirportSearch: React.FC<AirportSearchProps> = ({
                 type="button"
                 onClick={() => handleSelect(airport)}
                 style={{
-                  width: '100%', textAlign: 'left', padding: '10px 14px', minHeight: 44,
+                  width: '100%', textAlign: 'left', padding: '9px 14px',
                   background: 'none', border: 'none', cursor: 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                   borderBottom: '1px solid rgba(148,163,184,0.10)',

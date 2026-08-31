@@ -18,32 +18,31 @@ export const Header: React.FC<HeaderProps> = ({ onOpenInfoModal }) => {
         boxShadow: '0 1px 20px rgba(23,32,51,0.06)',
       }}
     >
-      <div className="max-w-[1400px] mx-auto px-3 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-2 sm:gap-4">
+      <div className="max-w-[1400px] mx-auto px-5 sm:px-8 h-14 flex items-center justify-between gap-4">
 
         {/* Left — Logo */}
-        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+        <div className="flex items-center gap-2.5 flex-shrink-0">
           <div style={{
             width: 32, height: 32,
             background: 'var(--navy)',
             borderRadius: 10,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             boxShadow: '0 2px 8px rgba(30,41,59,0.22)',
-            flexShrink: 0,
           }}>
             <Plane style={{ width: 15, height: 15, color: '#F9F7F2', transform: 'rotate(-45deg)' }} />
           </div>
-          <div className="min-w-0">
-            <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em', lineHeight: 1.1 }} className="truncate">
+          <div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em', lineHeight: 1.1 }}>
               FlightClaims
             </div>
-            <div style={{ fontSize: 10, color: 'var(--text-2)', letterSpacing: '0.03em' }} className="truncate">
+            <div style={{ fontSize: 10, color: 'var(--text-2)', letterSpacing: '0.03em' }}>
               AI Disruption Copilot
             </div>
           </div>
         </div>
 
         {/* Right — Status + Info */}
-        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+        <div className="flex items-center gap-2.5">
           {/* Live badge */}
           <div className="hidden sm:flex items-center gap-1.5 ff-pill ff-pill-success">
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--success)', display: 'block', flexShrink: 0 }} />
@@ -51,7 +50,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenInfoModal }) => {
           </div>
 
           {/* Demo mode badge */}
-          <div className="hidden md:flex ff-pill ff-pill-warn">
+          <div className="hidden sm:flex ff-pill ff-pill-warn">
             Demo Mode
           </div>
 
@@ -62,19 +61,19 @@ export const Header: React.FC<HeaderProps> = ({ onOpenInfoModal }) => {
             onClick={onOpenInfoModal}
             title="Passenger Rights Guide"
             style={{
-              width: 38, height: 38,
+              width: 34, height: 34,
               borderRadius: 10,
-              background: 'rgba(255,255,255,0.75)',
-              border: '1px solid rgba(148,163,184,0.25)',
+              background: 'rgba(255,255,255,0.65)',
+              border: '1px solid rgba(148,163,184,0.22)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               cursor: 'pointer',
               transition: 'background 160ms, box-shadow 160ms',
               color: 'var(--text-2)',
             }}
             onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.95)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.75)')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.65)')}
           >
-            <Info style={{ width: 16, height: 16 }} />
+            <Info style={{ width: 15, height: 15 }} />
           </button>
         </div>
       </div>

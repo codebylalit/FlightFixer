@@ -36,7 +36,7 @@ export const FlightForm: React.FC<FlightFormProps> = ({ flightCase, onChange, cu
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         {/* Airline + Flight Number */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
           <div>
             <label className="ff-label-field">Airline</label>
             <input
@@ -47,7 +47,6 @@ export const FlightForm: React.FC<FlightFormProps> = ({ flightCase, onChange, cu
               value={flightCase.airline}
               onChange={(e) => onChange({ airline: e.target.value })}
               className="ff-input"
-              style={{ minHeight: 42 }}
             />
             <datalist id="airlines-datalist">
               {popularAirlines.map(a => <option key={a} value={a} />)}
@@ -64,7 +63,7 @@ export const FlightForm: React.FC<FlightFormProps> = ({ flightCase, onChange, cu
                 value={flightCase.flightNumber}
                 onChange={(e) => onChange({ flightNumber: e.target.value.toUpperCase() })}
                 className="ff-input"
-                style={{ paddingLeft: 30, fontFamily: 'JetBrains Mono, monospace', textTransform: 'uppercase', minHeight: 42 }}
+                style={{ paddingLeft: 30, fontFamily: 'JetBrains Mono, monospace', textTransform: 'uppercase' }}
               />
             </div>
           </div>
@@ -93,9 +92,15 @@ export const FlightForm: React.FC<FlightFormProps> = ({ flightCase, onChange, cu
         {flightCase.origin && flightCase.destination && !isSameAirport && (
           <div
             id="route-distance-badge"
-            className="flex flex-col xs:flex-row items-start xs:items-center justify-between gap-1.5 p-3 rounded-xl bg-sky-light/20 border border-sky-light/30"
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '10px 14px',
+              borderRadius: 12,
+              background: 'rgba(201,221,234,0.22)',
+              border: '1px solid rgba(157,189,212,0.28)',
+            }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, fontWeight: 600, color: 'var(--text)' }} className="flex-wrap">
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, fontWeight: 600, color: 'var(--text)' }}>
               <span>{flightCase.origin.city} ({flightCase.origin.iata})</span>
               <ArrowRight style={{ width: 13, height: 13, color: 'var(--sky)', flexShrink: 0 }} />
               <span>{flightCase.destination.city} ({flightCase.destination.iata})</span>
@@ -117,7 +122,7 @@ export const FlightForm: React.FC<FlightFormProps> = ({ flightCase, onChange, cu
               value={flightCase.flightDate}
               onChange={(e) => onChange({ flightDate: e.target.value })}
               className="ff-input"
-              style={{ paddingLeft: 30, minHeight: 42 }}
+              style={{ paddingLeft: 30 }}
             />
           </div>
         </div>
@@ -135,13 +140,13 @@ export const FlightForm: React.FC<FlightFormProps> = ({ flightCase, onChange, cu
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
               <div>
                 <label htmlFor="passenger-name" className="ff-label-field">Your Full Name</label>
                 <div style={{ position: 'relative' }}>
                   <User style={{ position: 'absolute', left: 11, top: '50%', transform: 'translateY(-50%)', width: 13, height: 13, color: 'var(--text-3)', pointerEvents: 'none' }} />
                   <input id="passenger-name" type="text" placeholder="e.g. Rahul Sharma" value={flightCase.passengerName}
-                    onChange={(e) => onChange({ passengerName: e.target.value })} className="ff-input" style={{ paddingLeft: 30, minHeight: 42 }} />
+                    onChange={(e) => onChange({ passengerName: e.target.value })} className="ff-input" style={{ paddingLeft: 30 }} />
                 </div>
               </div>
               <div>
@@ -150,7 +155,7 @@ export const FlightForm: React.FC<FlightFormProps> = ({ flightCase, onChange, cu
                   <ShieldCheck style={{ position: 'absolute', left: 11, top: '50%', transform: 'translateY(-50%)', width: 13, height: 13, color: 'var(--text-3)', pointerEvents: 'none' }} />
                   <input id="booking-reference-pnr" type="text" placeholder="e.g. 6E9K2A" value={flightCase.bookingReference}
                     onChange={(e) => onChange({ bookingReference: e.target.value.toUpperCase() })} className="ff-input"
-                    style={{ paddingLeft: 30, fontFamily: 'JetBrains Mono, monospace', textTransform: 'uppercase', minHeight: 42 }} />
+                    style={{ paddingLeft: 30, fontFamily: 'JetBrains Mono, monospace', textTransform: 'uppercase' }} />
                 </div>
               </div>
             </div>
@@ -159,7 +164,7 @@ export const FlightForm: React.FC<FlightFormProps> = ({ flightCase, onChange, cu
               <div style={{ position: 'relative' }}>
                 <Mail style={{ position: 'absolute', left: 11, top: '50%', transform: 'translateY(-50%)', width: 13, height: 13, color: 'var(--text-3)', pointerEvents: 'none' }} />
                 <input id="passenger-email" type="email" placeholder="e.g. rahul@gmail.com" value={flightCase.passengerEmail}
-                  onChange={(e) => onChange({ passengerEmail: e.target.value })} className="ff-input" style={{ paddingLeft: 30, minHeight: 42 }} />
+                  onChange={(e) => onChange({ passengerEmail: e.target.value })} className="ff-input" style={{ paddingLeft: 30 }} />
               </div>
             </div>
           </div>

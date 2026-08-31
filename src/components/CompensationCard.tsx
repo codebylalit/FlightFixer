@@ -56,7 +56,10 @@ export const CompensationCard: React.FC<CompensationCardProps> = ({
 
       {hasAmount ? (
         <div style={{ marginBottom: 8 }}>
-          <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight font-sans break-words">
+          <div style={{
+            fontSize: 30, fontWeight: 800, color: 'var(--text)',
+            letterSpacing: '-0.03em', lineHeight: 1, fontFamily: 'Inter, sans-serif',
+          }}>
             {financialRecovery.formattedRange}
           </div>
           <div style={{ fontSize: 11, color: 'var(--text-2)', marginTop: 4 }}>Estimated statutory relief</div>

@@ -162,25 +162,26 @@ export const ClaimDraftModal: React.FC<ClaimDraftModalProps> = ({
           padding: '14px 22px',
           borderTop: '1px solid rgba(148,163,184,0.15)',
           background: 'rgba(238,243,247,0.70)',
-        }} className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
-          <div className="flex items-center gap-2 w-full sm:w-auto">
-            <button id="copy-draft-btn" type="button" onClick={handleCopy} className="ff-btn-secondary flex-1 sm:flex-initial" style={{ minHeight: 40 }}>
-              {copied ? <Check style={{ width: 13, height: 13, color: 'var(--success)', flexShrink: 0 }} /> : <Copy style={{ width: 13, height: 13, flexShrink: 0 }} />}
-              <span>{copied ? 'Copied!' : 'Copy'}</span>
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap',
+        }}>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button id="copy-draft-btn" type="button" onClick={handleCopy} className="ff-btn-secondary">
+              {copied ? <Check style={{ width: 13, height: 13, color: 'var(--success)' }} /> : <Copy style={{ width: 13, height: 13 }} />}
+              {copied ? 'Copied!' : 'Copy'}
             </button>
-            <button id="download-draft-btn" type="button" onClick={handleDownload} className="ff-btn-secondary flex-1 sm:flex-initial" style={{ minHeight: 40 }}>
-              <Download style={{ width: 13, height: 13, flexShrink: 0 }} />
-              <span>Download</span>
+            <button id="download-draft-btn" type="button" onClick={handleDownload} className="ff-btn-secondary">
+              <Download style={{ width: 13, height: 13 }} />
+              Download
             </button>
           </div>
 
-          <div className="flex items-center gap-2 w-full sm:w-auto">
-            <button id="cancel-draft-btn" type="button" onClick={onClose} className="ff-btn-secondary flex-1 sm:flex-initial" style={{ minHeight: 40 }}>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button id="cancel-draft-btn" type="button" onClick={onClose} className="ff-btn-secondary">
               Cancel
             </button>
-            <button id="approve-draft-btn" type="button" onClick={handleSaveAndApprove} className="ff-btn-success flex-1 sm:flex-initial" style={{ minHeight: 40 }}>
-              <Check style={{ width: 15, height: 15, flexShrink: 0 }} />
-              <span>{draft.isApprovedByPassenger ? 'Re-Approve Draft' : 'Approve Draft'}</span>
+            <button id="approve-draft-btn" type="button" onClick={handleSaveAndApprove} className="ff-btn-success">
+              <Check style={{ width: 15, height: 15 }} />
+              {draft.isApprovedByPassenger ? 'Re-Approve Draft' : 'Approve Draft'}
             </button>
           </div>
         </div>
