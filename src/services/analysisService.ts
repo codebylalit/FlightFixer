@@ -478,7 +478,7 @@ export function analyzeFlightDisruption(flightCase: FlightCase): AnalysisResult 
     missingInformation.push('Airline name and Flight number are needed to generate an official claim letter.');
   }
 
-  const legalDisclaimer = 'Based on the information provided. Final eligibility depends on applicable rules, extraordinary circumstance exceptions, and the specific facts of the disruption. FlightFixer provides informational guidance and does not provide formal legal advice.';
+  const legalDisclaimer = 'Based on the information provided. Final eligibility depends on applicable rules, extraordinary circumstance exceptions, and the specific facts of the disruption. FlightClaims provides informational guidance and does not provide formal legal advice.';
 
   return {
     caseStatus,

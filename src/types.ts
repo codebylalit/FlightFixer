@@ -35,6 +35,8 @@ export interface FlightCase {
   scheduledBlockTimeHours?: number;
   basicFare?: number;
   fuelCharge?: number;
+  // User-facing: total ticket price — app derives basicFare + fuelCharge from this
+  totalTicketPrice?: number;
   
   // Denied Boarding fields
   alternateArrangedTime: AlternateArrangedTime;

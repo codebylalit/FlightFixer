@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Sparkles, Loader2, ArrowUpRight, Terminal, RefreshCw } from 'lucide-react';
+import { Send, Bot, User, Loader2, Terminal } from 'lucide-react';
 import { FlightCase, AnalysisResult, ClaimDraft } from '../types';
 import { webMcpBridge } from '../services/webMcpBridge';
 
@@ -19,16 +19,13 @@ interface AICopilotChatProps {
 }
 
 export const AICopilotChat: React.FC<AICopilotChatProps> = ({
-  flightCase,
-  analysisResult,
-  claimDraft,
-  onOpenDraftModal
+  flightCase, analysisResult, claimDraft, onOpenDraftModal
 }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 'welcome-msg',
       role: 'model',
-      text: "Hello! I'm your FlightFixer AI Copilot. I analyze your flight disruption facts against DGCA CAR (India), EU261, UK261, and international rules. I can also execute WebMCP tools to inspect your case, prepare formal grievance letters, and guide your next steps.",
+      text: "Hello! I'm your FlightClaims AI Copilot. I analyze your flight disruption facts against DGCA CAR (India), EU261, UK261, and international rules. I can also prepare formal grievance letters and guide your next steps.",
       timestamp: new Date().toISOString()
     }
   ]);
@@ -41,10 +38,10 @@ export const AICopilotChat: React.FC<AICopilotChatProps> = ({
   }, [messages]);
 
   const quickPrompts = [
-    { label: 'Analyze current case', prompt: 'Please analyze my current flight case and explain my passenger rights.' },
-    { label: 'DGCA 4h Delay rules', prompt: 'What are my exact rights under DGCA CAR for a 4-hour delay?' },
+    { label: 'Analyze my case', prompt: 'Please analyze my current flight case and explain my passenger rights.' },
+    { label: 'DGCA 4h rules', prompt: 'What are my exact rights under DGCA CAR for a 4-hour delay?' },
     { label: 'Draft claim letter', prompt: 'Please prepare a formal passenger claim request letter for my case.' },
-    { label: 'Populate demo form', prompt: 'Fill the demo claim form with my approved case details.' },
+    { label: 'Fill claim form', prompt: 'Fill the demo claim form with my approved case details.' },
   ];
 
   const handleSendMessage = async (textToSend?: string) => {
@@ -52,18 +49,13 @@ export const AICopilotChat: React.FC<AICopilotChatProps> = ({
     if (!text || isLoading) return;
 
     const userMsg: ChatMessage = {
-      id: 'msg_' + Date.now(),
-      role: 'user',
-      text,
-      timestamp: new Date().toISOString()
+      id: 'msg_' + Date.now(), role: 'user', text, timestamp: new Date().toISOString()
     };
-
     setMessages(prev => [...prev, userMsg]);
     setInputText('');
     setIsLoading(true);
 
     try {
-      // Check if user is asking to trigger a specific WebMCP action
       const lower = text.toLowerCase();
       let triggeredAction = '';
 
@@ -81,23 +73,17 @@ export const AICopilotChat: React.FC<AICopilotChatProps> = ({
         await webMcpBridge.executeTool('get_case_summary', {});
       }
 
-      // Call server-side Gemini Copilot endpoint
       const response = await fetch('/api/gemini/copilot', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: text,
           caseSummary: {
-            airline: flightCase.airline,
-            flightNumber: flightCase.flightNumber,
-            origin: flightCase.origin?.iata,
-            destination: flightCase.destination?.iata,
-            disruptionType: flightCase.disruptionType,
-            delayHours: flightCase.delayHours,
-            analysisStatus: analysisResult?.caseStatus,
-            recovery: analysisResult?.financialRecovery,
-            hasDraft: !!claimDraft,
-            isDraftApproved: claimDraft?.isApprovedByPassenger
+            airline: flightCase.airline, flightNumber: flightCase.flightNumber,
+            origin: flightCase.origin?.iata, destination: flightCase.destination?.iata,
+            disruptionType: flightCase.disruptionType, delayHours: flightCase.delayHours,
+            analysisStatus: analysisResult?.caseStatus, recovery: analysisResult?.financialRecovery,
+            hasDraft: !!claimDraft, isDraftApproved: claimDraft?.isApprovedByPassenger
           },
           conversationHistory: messages.map(m => ({ role: m.role, content: m.text }))
         })
@@ -105,42 +91,33 @@ export const AICopilotChat: React.FC<AICopilotChatProps> = ({
 
       if (response.ok) {
         const data = await response.json();
-        const modelMsg: ChatMessage = {
-          id: 'msg_reply_' + Date.now(),
-          role: 'model',
+        setMessages(prev => [...prev, {
+          id: 'msg_reply_' + Date.now(), role: 'model',
           text: data.reply || "I have processed your request.",
           timestamp: new Date().toISOString(),
           actionInvoked: triggeredAction || undefined
-        };
-        setMessages(prev => [...prev, modelMsg]);
+        }]);
       } else {
-        // Local intelligent fallback response if backend offline or key not configured
         let fallbackText = "I have evaluated your case against the applicable aviation rules.";
         if (triggeredAction === 'prepare_passenger_request') {
-          fallbackText = "I have executed the WebMCP `prepare_passenger_request` tool. A formal claim draft has been created in your workspace. Please review and approve the draft to continue.";
+          fallbackText = "I've executed the claim preparation tool. A formal draft has been created — please review and approve it to continue.";
         } else if (triggeredAction === 'approve_and_fill_demo_form') {
-          if (claimDraft?.isApprovedByPassenger) {
-            fallbackText = "✓ WebMCP tool `approve_and_fill_demo_form` executed successfully. Your approved details have populated the Demo Claim Form!";
-          } else {
-            fallbackText = "⚠️ Human Approval Guard: The passenger must review and click 'Approve Draft' in the UI before the demo form can be populated.";
-          }
+          fallbackText = claimDraft?.isApprovedByPassenger
+            ? "✓ Your approved details have populated the claim form!"
+            : "⚠ Please approve the draft first before the form can be populated.";
         } else {
-          fallbackText = `Based on your ${flightCase.disruptionType} case on ${flightCase.airline || 'your flight'}, your jurisdiction is ${analysisResult?.jurisdictionLabel || 'DGCA Domestic'}. Potential status: ${analysisResult?.caseStatus || 'Further Review Recommended'}.`;
+          fallbackText = `Based on your ${flightCase.disruptionType} case on ${flightCase.airline}, jurisdiction: ${analysisResult?.jurisdictionLabel ?? 'DGCA Domestic'}. Status: ${analysisResult?.caseStatus ?? 'Further Review Recommended'}.`;
         }
-
         setMessages(prev => [...prev, {
-          id: 'msg_fallback_' + Date.now(),
-          role: 'model',
-          text: fallbackText,
-          timestamp: new Date().toISOString(),
+          id: 'msg_fallback_' + Date.now(), role: 'model',
+          text: fallbackText, timestamp: new Date().toISOString(),
           actionInvoked: triggeredAction || undefined
         }]);
       }
-    } catch (err: any) {
+    } catch {
       setMessages(prev => [...prev, {
-        id: 'msg_err_' + Date.now(),
-        role: 'model',
-        text: "I am ready to assist you. You can use the quick prompts below or inspect registered WebMCP tools.",
+        id: 'msg_err_' + Date.now(), role: 'model',
+        text: "I'm ready to assist. Use the quick prompts below or ask me anything.",
         timestamp: new Date().toISOString()
       }]);
     } finally {
@@ -149,104 +126,147 @@ export const AICopilotChat: React.FC<AICopilotChatProps> = ({
   };
 
   return (
-    <div id="ai-copilot-chat-container" className="bg-white border border-slate-200/80 rounded-xl p-5 sm:p-6 flex flex-col h-[560px] shadow-xs">
+    <div
+      id="ai-copilot-chat-container"
+      className="ff-card"
+      style={{ padding: '18px 18px 16px', display: 'flex', flexDirection: 'column', height: 520 }}
+    >
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-slate-100 pb-3 flex-shrink-0">
-        <div className="flex items-center gap-2">
-          <div>
-            <h3 className="text-xs font-semibold text-slate-900 uppercase tracking-wider">
-              AI Copilot & WebMCP Agent
-            </h3>
-            <p className="text-[11px] text-slate-500">
-              Conversational Rights Guidance & Tool Caller
-            </p>
-          </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, paddingBottom: 14, borderBottom: '1px solid rgba(148,163,184,0.15)', flexShrink: 0 }}>
+        <div style={{
+          width: 32, height: 32, borderRadius: 10,
+          background: 'var(--navy)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          boxShadow: '0 2px 8px rgba(30,41,59,0.20)',
+        }}>
+          <Bot style={{ width: 15, height: 15, color: '#F9F7F2' }} />
         </div>
+        <div>
+          <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em' }}>AI Copilot</div>
+          <div style={{ fontSize: 11, color: 'var(--text-2)' }}>Ask anything about your passenger rights</div>
+        </div>
+        <div className="ff-pulse" style={{ marginLeft: 'auto', width: 7, height: 7, borderRadius: '50%', background: 'var(--success)', boxShadow: '0 0 0 2px rgba(94,155,120,0.25)' }} />
       </div>
 
-      {/* Messages Scroll Area */}
-      <div className="flex-1 overflow-y-auto py-3 space-y-3 pr-1 text-xs">
+      {/* Messages */}
+      <div style={{ flex: 1, overflowY: 'auto', padding: '12px 2px', display: 'flex', flexDirection: 'column', gap: 10 }} className="no-scrollbar">
         {messages.map((msg) => (
-          <div
-            key={msg.id}
-            className={`flex gap-2.5 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
+          <div key={msg.id} style={{ display: 'flex', gap: 8, justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start' }}>
             {msg.role === 'model' && (
-              <div className="w-6 h-6 rounded-md bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 flex-shrink-0 mt-0.5">
-                <Bot className="w-3.5 h-3.5" />
+              <div style={{
+                width: 24, height: 24, borderRadius: 7, flexShrink: 0, marginTop: 2,
+                background: 'rgba(201,221,234,0.30)', border: '1px solid rgba(157,189,212,0.30)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <Bot style={{ width: 12, height: 12, color: 'var(--navy)' }} />
               </div>
             )}
-
-            <div
-              className={`max-w-[85%] p-3 rounded-xl leading-relaxed ${
-                msg.role === 'user'
-                  ? 'bg-slate-900 text-white rounded-br-xs'
-                  : 'bg-slate-50 border border-slate-200/80 text-slate-800 rounded-bl-xs'
-              }`}
-            >
-              <div className="whitespace-pre-wrap">{msg.text}</div>
+            <div style={{
+              maxWidth: '82%',
+              padding: '9px 12px',
+              borderRadius: msg.role === 'user' ? '14px 14px 4px 14px' : '14px 14px 14px 4px',
+              fontSize: 12, lineHeight: 1.6,
+              background: msg.role === 'user' ? 'var(--navy)' : 'rgba(255,255,255,0.82)',
+              color: msg.role === 'user' ? '#F9F7F2' : 'var(--text)',
+              border: msg.role === 'user' ? 'none' : '1px solid rgba(148,163,184,0.18)',
+              boxShadow: msg.role === 'user' ? '0 2px 10px rgba(30,41,59,0.18)' : '0 1px 6px rgba(23,32,51,0.05)',
+            }}>
+              <div style={{ whiteSpace: 'pre-wrap' }}>{msg.text}</div>
               {msg.actionInvoked && (
-                <div className="mt-2 pt-1.5 border-t border-slate-200 flex items-center gap-1.5 text-[10px] font-mono text-emerald-700 font-medium">
-                  <Terminal className="w-3 h-3" />
-                  <span>WebMCP Action: {msg.actionInvoked}()</span>
+                <div style={{
+                  marginTop: 8, paddingTop: 7, borderTop: '1px solid rgba(255,255,255,0.15)',
+                  display: 'flex', alignItems: 'center', gap: 5,
+                }}>
+                  <span className="ff-tool-badge" style={{ background: msg.role === 'user' ? 'rgba(255,255,255,0.15)' : undefined }}>
+                    <Terminal style={{ width: 10, height: 10 }} />
+                    {msg.actionInvoked}()
+                  </span>
                 </div>
               )}
             </div>
-
             {msg.role === 'user' && (
-              <div className="w-6 h-6 rounded-md bg-slate-200 border border-slate-300 flex items-center justify-center text-slate-700 flex-shrink-0 mt-0.5">
-                <User className="w-3.5 h-3.5" />
+              <div style={{
+                width: 24, height: 24, borderRadius: 7, flexShrink: 0, marginTop: 2,
+                background: 'rgba(30,41,59,0.12)', border: '1px solid rgba(30,41,59,0.12)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <User style={{ width: 12, height: 12, color: 'var(--text-2)' }} />
               </div>
             )}
           </div>
         ))}
 
         {isLoading && (
-          <div className="flex gap-2.5 items-center text-slate-500 text-xs">
-            <div className="w-6 h-6 rounded-md bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700">
-              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <div style={{
+              width: 24, height: 24, borderRadius: 7,
+              background: 'rgba(201,221,234,0.30)', border: '1px solid rgba(157,189,212,0.30)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <Loader2 style={{ width: 12, height: 12, color: 'var(--navy)', animation: 'spin 1s linear infinite' }} />
             </div>
-            <span>Evaluating case against aviation regulations & executing WebMCP tools...</span>
+            <div style={{
+              padding: '8px 12px', borderRadius: '14px 14px 14px 4px',
+              background: 'rgba(255,255,255,0.82)', border: '1px solid rgba(148,163,184,0.18)',
+              fontSize: 12, color: 'var(--text-2)',
+            }}>
+              Analyzing case against aviation regulations…
+            </div>
           </div>
         )}
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Quick Prompts Chips */}
-      <div className="py-2 flex items-center gap-1.5 overflow-x-auto no-scrollbar flex-shrink-0 border-t border-slate-100">
+      {/* Quick prompts */}
+      <div style={{ display: 'flex', gap: 6, overflowX: 'auto', padding: '10px 0 8px', flexShrink: 0, borderTop: '1px solid rgba(148,163,184,0.12)' }} className="no-scrollbar">
         {quickPrompts.map((qp, idx) => (
           <button
             key={idx}
             type="button"
             onClick={() => handleSendMessage(qp.prompt)}
-            className="flex-shrink-0 px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200 text-[11px] text-slate-700 transition-colors whitespace-nowrap cursor-pointer"
+            style={{
+              flexShrink: 0,
+              padding: '5px 11px',
+              borderRadius: 99,
+              background: 'rgba(201,221,234,0.25)',
+              border: '1px solid rgba(157,189,212,0.30)',
+              fontSize: 11,
+              color: 'var(--text-2)',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              transition: 'background 150ms, color 150ms',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(157,189,212,0.35)'; e.currentTarget.style.color = 'var(--text)'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(201,221,234,0.25)'; e.currentTarget.style.color = 'var(--text-2)'; }}
           >
             {qp.label}
           </button>
         ))}
       </div>
 
-      {/* Input Box */}
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSendMessage();
-        }}
-        className="flex items-center gap-2 pt-1 flex-shrink-0"
-      >
+      {/* Input */}
+      <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
         <input
           type="text"
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
-          placeholder="Ask AI Copilot about your rights or actions..."
-          className="flex-1 px-3 py-2 bg-slate-50/60 border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-800 focus:bg-white focus:ring-1 focus:ring-slate-800 transition-colors"
+          placeholder="Ask about your rights or actions…"
+          className="ff-input"
+          style={{ flex: 1, fontSize: 12 }}
         />
         <button
           type="submit"
           disabled={!inputText.trim() || isLoading}
-          className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 disabled:bg-slate-200 disabled:text-slate-400 text-white transition-colors cursor-pointer"
+          style={{
+            width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+            background: inputText.trim() && !isLoading ? 'var(--navy)' : 'rgba(148,163,184,0.20)',
+            border: 'none', cursor: inputText.trim() && !isLoading ? 'pointer' : 'default',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            transition: 'background 160ms, transform 130ms',
+            boxShadow: inputText.trim() ? '0 2px 8px rgba(30,41,59,0.18)' : 'none',
+          }}
         >
-          <Send className="w-4 h-4" />
+          <Send style={{ width: 14, height: 14, color: inputText.trim() && !isLoading ? '#F9F7F2' : 'var(--text-3)' }} />
         </button>
       </form>
     </div>

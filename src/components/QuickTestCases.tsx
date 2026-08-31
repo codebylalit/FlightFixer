@@ -1,7 +1,7 @@
 import React from 'react';
-import { Sparkles, ArrowRight, Zap } from 'lucide-react';
 import { FlightCase } from '../types';
 import { getAirportByIata } from '../services/airportService';
+import { Zap } from 'lucide-react';
 
 interface QuickTestCasesProps {
   onApplyCase: (flightCase: FlightCase, caseTitle: string) => void;
@@ -11,184 +11,157 @@ export const QuickTestCases: React.FC<QuickTestCasesProps> = ({ onApplyCase }) =
   const testCases = [
     {
       id: 'test-case-1',
-      title: 'BOM → AMD (4h Delay)',
-      desc: 'DGCA 4-Hour Delay • Duty of Care & Refreshments',
-      badge: 'DGCA Domestic',
-      badgeColor: 'text-blue-400 bg-blue-500/10 border-blue-500/20',
+      title: 'BOM → AMD',
+      sub: '4h Delay',
+      badge: 'DGCA',
+      badgeColor: 'ff-pill-info',
       data: (): FlightCase => ({
-        airline: 'IndiGo',
-        flightNumber: '6E-5342',
-        origin: getAirportByIata('BOM'),
-        destination: getAirportByIata('AMD'),
+        airline: 'IndiGo', flightNumber: '6E-5342',
+        origin: getAirportByIata('BOM'), destination: getAirportByIata('AMD'),
         flightDate: new Date().toISOString().split('T')[0],
-        disruptionType: 'delayed',
-        delayHours: 4,
-        delayMinutes: 15,
+        disruptionType: 'delayed', delayHours: 4, delayMinutes: 15,
         airlineReason: 'Late arrival of incoming aircraft due to ATC congestion',
-        informedWindow: 'at_airport',
-        alternateOffered: 'none',
-        basicFare: 3200,
-        fuelCharge: 800,
-        scheduledBlockTimeHours: 1.2,
-        alternateArrangedTime: 'none',
-        passengerDeclinedAlternate: false,
-        missedConnectionDelayHours: 0,
-        singleTicketBooking: true,
-        passengerName: 'Rahul Sharma',
-        passengerEmail: 'rahul.sharma@example.com',
-        passengerPhone: '+91 98765 43210',
+        informedWindow: 'at_airport', alternateOffered: 'none',
+        totalTicketPrice: 4000, basicFare: 3200, fuelCharge: 800,
+        scheduledBlockTimeHours: 1.2, alternateArrangedTime: 'none',
+        passengerDeclinedAlternate: false, missedConnectionDelayHours: 0,
+        singleTicketBooking: true, passengerName: 'Rahul Sharma',
+        passengerEmail: 'rahul.sharma@example.com', passengerPhone: '+91 98765 43210',
         bookingReference: '6E9K2A'
       })
     },
     {
       id: 'test-case-2',
-      title: 'DEL → BLR (Cancellation <24h)',
-      desc: 'DGCA Short Notice • Full Fare Breakdown • Up to ₹10,000',
-      badge: 'DGCA Eligible',
-      badgeColor: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
+      title: 'DEL → BLR',
+      sub: 'Cancelled <24h',
+      badge: 'Eligible',
+      badgeColor: 'ff-pill-success',
       data: (): FlightCase => ({
-        airline: 'Air India',
-        flightNumber: 'AI-803',
-        origin: getAirportByIata('DEL'),
-        destination: getAirportByIata('BLR'),
+        airline: 'Air India', flightNumber: 'AI-803',
+        origin: getAirportByIata('DEL'), destination: getAirportByIata('BLR'),
         flightDate: new Date().toISOString().split('T')[0],
-        disruptionType: 'cancelled',
-        delayHours: 0,
-        delayMinutes: 0,
+        disruptionType: 'cancelled', delayHours: 0, delayMinutes: 0,
         airlineReason: 'Technical glitch on aircraft',
-        informedWindow: 'less_than_24h',
-        alternateOffered: 'next_day',
-        basicFare: 7400,
-        fuelCharge: 1800,
-        scheduledBlockTimeHours: 2.75,
-        alternateArrangedTime: 'none',
-        passengerDeclinedAlternate: false,
-        missedConnectionDelayHours: 0,
-        singleTicketBooking: true,
-        passengerName: 'Priya Patel',
-        passengerEmail: 'priya.patel@example.com',
-        passengerPhone: '+91 91234 56789',
+        informedWindow: 'less_than_24h', alternateOffered: 'next_day',
+        totalTicketPrice: 9200, basicFare: 7400, fuelCharge: 1800,
+        scheduledBlockTimeHours: 2.75, alternateArrangedTime: 'none',
+        passengerDeclinedAlternate: false, missedConnectionDelayHours: 0,
+        singleTicketBooking: true, passengerName: 'Priya Patel',
+        passengerEmail: 'priya.patel@example.com', passengerPhone: '+91 91234 56789',
         bookingReference: 'AI479X'
       })
     },
     {
       id: 'test-case-3',
-      title: 'DEL → GOI (Missing Fare Info)',
-      desc: 'Cancellation without fare breakdown • Status: Not Yet Confirmed',
+      title: 'DEL → GOI',
+      sub: 'Missing Fare',
       badge: 'Info Needed',
-      badgeColor: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
+      badgeColor: 'ff-pill-warn',
       data: (): FlightCase => ({
-        airline: 'SpiceJet',
-        flightNumber: 'SG-184',
-        origin: getAirportByIata('DEL'),
-        destination: getAirportByIata('GOI'),
+        airline: 'SpiceJet', flightNumber: 'SG-184',
+        origin: getAirportByIata('DEL'), destination: getAirportByIata('GOI'),
         flightDate: new Date().toISOString().split('T')[0],
-        disruptionType: 'cancelled',
-        delayHours: 0,
-        delayMinutes: 0,
+        disruptionType: 'cancelled', delayHours: 0, delayMinutes: 0,
         airlineReason: 'Commercial / operational consolidation',
-        informedWindow: 'less_than_24h',
-        alternateOffered: 'none',
-        basicFare: undefined, // Intentionally undefined to demonstrate missing information
-        fuelCharge: undefined,
-        scheduledBlockTimeHours: undefined,
-        alternateArrangedTime: 'none',
-        passengerDeclinedAlternate: false,
-        missedConnectionDelayHours: 0,
-        singleTicketBooking: true,
-        passengerName: 'Aarav Mehta',
-        passengerEmail: 'aarav.mehta@example.com',
-        passengerPhone: '+91 99887 76655',
+        informedWindow: 'less_than_24h', alternateOffered: 'none',
+        totalTicketPrice: undefined, basicFare: undefined, fuelCharge: undefined,
+        scheduledBlockTimeHours: undefined, alternateArrangedTime: 'none',
+        passengerDeclinedAlternate: false, missedConnectionDelayHours: 0,
+        singleTicketBooking: true, passengerName: 'Aarav Mehta',
+        passengerEmail: 'aarav.mehta@example.com', passengerPhone: '+91 99887 76655',
         bookingReference: 'SG821M'
       })
     },
     {
       id: 'test-case-4',
-      title: 'LHR → CDG (EU261 €250 / £220)',
-      desc: 'Short Haul European Delay 3h+ • Statutory Compensation',
-      badge: 'UK/EU 261',
-      badgeColor: 'text-indigo-400 bg-indigo-500/10 border-indigo-500/20',
+      title: 'LHR → CDG',
+      sub: 'EU261 €250',
+      badge: 'UK/EU',
+      badgeColor: 'ff-pill-info',
       data: (): FlightCase => ({
-        airline: 'British Airways',
-        flightNumber: 'BA-308',
-        origin: getAirportByIata('LHR'),
-        destination: getAirportByIata('CDG'),
+        airline: 'British Airways', flightNumber: 'BA-308',
+        origin: getAirportByIata('LHR'), destination: getAirportByIata('CDG'),
         flightDate: new Date().toISOString().split('T')[0],
-        disruptionType: 'delayed',
-        delayHours: 3,
-        delayMinutes: 45,
+        disruptionType: 'delayed', delayHours: 3, delayMinutes: 45,
         airlineReason: 'Crew scheduling shortage',
-        informedWindow: 'at_airport',
-        alternateOffered: 'none',
-        basicFare: 120,
-        fuelCharge: 40,
-        scheduledBlockTimeHours: 1.3,
-        alternateArrangedTime: 'none',
-        passengerDeclinedAlternate: false,
-        missedConnectionDelayHours: 0,
-        singleTicketBooking: true,
-        passengerName: 'James Wilson',
-        passengerEmail: 'james.wilson@example.com',
-        passengerPhone: '+44 7700 900077',
+        informedWindow: 'at_airport', alternateOffered: 'none',
+        totalTicketPrice: 160, basicFare: 120, fuelCharge: 40,
+        scheduledBlockTimeHours: 1.3, alternateArrangedTime: 'none',
+        passengerDeclinedAlternate: false, missedConnectionDelayHours: 0,
+        singleTicketBooking: true, passengerName: 'James Wilson',
+        passengerEmail: 'james.wilson@example.com', passengerPhone: '+44 7700 900077',
         bookingReference: 'BA719Q'
       })
     },
     {
       id: 'test-case-5',
-      title: 'BLR → HYD (Denied Boarding)',
-      desc: 'Involuntary Overbooking • 400% Basic + Fuel Up to ₹20k',
-      badge: 'Overbooking',
-      badgeColor: 'text-rose-400 bg-rose-500/10 border-rose-500/20',
+      title: 'BLR → HYD',
+      sub: 'Denied Boarding',
+      badge: 'Overbook',
+      badgeColor: 'ff-pill-neutral',
       data: (): FlightCase => ({
-        airline: 'IndiGo',
-        flightNumber: '6E-419',
-        origin: getAirportByIata('BLR'),
-        destination: getAirportByIata('HYD'),
+        airline: 'IndiGo', flightNumber: '6E-419',
+        origin: getAirportByIata('BLR'), destination: getAirportByIata('HYD'),
         flightDate: new Date().toISOString().split('T')[0],
-        disruptionType: 'denied_boarding',
-        delayHours: 0,
-        delayMinutes: 0,
+        disruptionType: 'denied_boarding', delayHours: 0, delayMinutes: 0,
         airlineReason: 'Aircraft overbooking and capacity restriction',
-        informedWindow: 'at_airport',
-        alternateOffered: 'none',
-        basicFare: 4500,
-        fuelCharge: 950,
-        scheduledBlockTimeHours: 1.1,
-        alternateArrangedTime: 'after_24h',
-        passengerDeclinedAlternate: true,
-        missedConnectionDelayHours: 0,
-        singleTicketBooking: true,
-        passengerName: 'Ananya Roy',
-        passengerEmail: 'ananya.roy@example.com',
-        passengerPhone: '+91 98450 12345',
+        informedWindow: 'at_airport', alternateOffered: 'none',
+        totalTicketPrice: 5450, basicFare: 4500, fuelCharge: 950,
+        scheduledBlockTimeHours: 1.1, alternateArrangedTime: 'after_24h',
+        passengerDeclinedAlternate: true, missedConnectionDelayHours: 0,
+        singleTicketBooking: true, passengerName: 'Ananya Roy',
+        passengerEmail: 'ananya.roy@example.com', passengerPhone: '+91 98450 12345',
         bookingReference: '6E499X'
       })
-    }
+    },
   ];
 
   return (
-    <div id="quick-test-scenarios" className="bg-white border border-slate-200/80 rounded-xl p-3 sm:p-4 mb-6 shadow-xs">
-      <div className="flex items-center justify-between gap-2 mb-2.5">
-        <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
-          Quick test cases
-        </span>
-        <span className="text-[11px] text-slate-400 hidden sm:inline">
-          Select a disruption scenario to test calculations & WebMCP
-        </span>
+    <div id="quick-test-scenarios" style={{ marginBottom: 18 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <Zap style={{ width: 13, height: 13, color: 'var(--amber)' }} />
+          <span className="ff-label">Quick Scenarios</span>
+        </div>
+        <span style={{ fontSize: 11, color: 'var(--text-3)' }}>Select to instantly test calculations</span>
       </div>
-
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 sm:flex-wrap">
+      <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4 }} className="no-scrollbar">
         {testCases.map((tc) => (
           <button
             key={tc.id}
             id={tc.id}
             type="button"
-            onClick={() => onApplyCase(tc.data(), tc.title)}
-            className="flex-shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs text-slate-700 font-medium transition-colors cursor-pointer"
+            onClick={() => onApplyCase(tc.data(), `${tc.title} ${tc.sub}`)}
+            style={{
+              flexShrink: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              gap: 4,
+              padding: '10px 14px',
+              borderRadius: 14,
+              background: 'rgba(255,255,255,0.65)',
+              border: '1px solid rgba(255,255,255,0.70)',
+              backdropFilter: 'blur(10px)',
+              cursor: 'pointer',
+              transition: 'background 160ms, box-shadow 160ms, transform 140ms',
+              boxShadow: '0 1px 8px rgba(23,32,51,0.05)',
+              minWidth: 110,
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'rgba(255,255,255,0.90)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 4px 16px rgba(23,32,51,0.10)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'rgba(255,255,255,0.65)';
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 1px 8px rgba(23,32,51,0.05)';
+            }}
           >
-            <span className="text-slate-900 font-semibold">{tc.title}</span>
-            <span className="text-slate-400">·</span>
-            <span className="text-slate-500 text-[11px]">{tc.badge}</span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em' }}>{tc.title}</span>
+            <span style={{ fontSize: 11, color: 'var(--text-2)' }}>{tc.sub}</span>
+            <span className={`ff-pill ${tc.badgeColor}`} style={{ marginTop: 2, padding: '2px 7px', fontSize: 10 }}>{tc.badge}</span>
           </button>
         ))}
       </div>

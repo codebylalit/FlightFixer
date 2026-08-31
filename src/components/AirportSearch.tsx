@@ -73,24 +73,35 @@ export const AirportSearch: React.FC<AirportSearchProps> = ({
 
   return (
     <div id={`${id}-container`} className="relative w-full" ref={containerRef}>
-      <label htmlFor={id} className="block text-[11px] font-medium text-slate-600 mb-1">
+      <label htmlFor={id} className="ff-label-field">
         {label}
       </label>
 
       {selectedAirport ? (
         <div
           id={`${id}-selected-card`}
-          className="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 shadow-2xs"
+          style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '9px 12px', borderRadius: 11,
+            background: 'rgba(201,221,234,0.22)',
+            border: '1px solid rgba(157,189,212,0.30)',
+            boxShadow: '0 1px 4px rgba(23,32,51,0.04)',
+          }}
         >
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className="flex-shrink-0 w-8 h-8 rounded-md bg-slate-200/80 border border-slate-300/60 flex items-center justify-center text-slate-900 font-bold text-xs font-mono">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+            <div style={{
+              flexShrink: 0, width: 34, height: 34, borderRadius: 9,
+              background: 'var(--navy)', color: '#F9F7F2',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontFamily: 'JetBrains Mono, monospace', fontSize: 11, fontWeight: 700,
+            }}>
               {selectedAirport.iata}
             </div>
-            <div className="min-w-0">
-              <div className="font-semibold text-xs sm:text-sm text-slate-900 truncate">
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontWeight: 700, fontSize: 12.5, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {selectedAirport.city} ({selectedAirport.iata})
               </div>
-              <div className="text-[11px] text-slate-500 truncate">
+              <div style={{ fontSize: 11, color: 'var(--text-2)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {selectedAirport.name} · {selectedAirport.country}
               </div>
             </div>
@@ -99,34 +110,39 @@ export const AirportSearch: React.FC<AirportSearchProps> = ({
             id={`${id}-clear-btn`}
             type="button"
             onClick={handleClear}
-            className="flex-shrink-0 p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 rounded-md transition-colors cursor-pointer"
+            style={{
+              flexShrink: 0, padding: 5, borderRadius: 7, border: 'none',
+              background: 'rgba(148,163,184,0.14)', color: 'var(--text-2)', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              transition: 'background 140ms',
+            }}
             title="Clear selected airport"
           >
-            <X className="w-4 h-4" />
+            <X style={{ width: 13, height: 13 }} />
           </button>
         </div>
       ) : (
-        <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-            <Search className="w-3.5 h-3.5" />
+        <div style={{ position: 'relative' }}>
+          <div style={{ position: 'absolute', left: 11, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--text-3)' }}>
+            <Search style={{ width: 13, height: 13 }} />
           </div>
           <input
             id={id}
             type="text"
             value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              setIsOpen(true);
-            }}
+            onChange={(e) => { setQuery(e.target.value); setIsOpen(true); }}
             onFocus={() => setIsOpen(true)}
             placeholder={placeholder}
-            className={`w-full pl-9 pr-8 py-2 bg-slate-50/60 border ${
-              error ? 'border-rose-300 focus:border-rose-500 focus:ring-rose-500/20' : 'border-slate-200 focus:border-slate-800 focus:bg-white focus:ring-1 focus:ring-slate-800'
-            } rounded-lg text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none transition-colors`}
+            className="ff-input"
+            style={{
+              paddingLeft: 30, paddingRight: 30,
+              borderColor: error ? '#ef9a9a' : undefined,
+              boxShadow: error ? '0 0 0 3px rgba(239,154,154,0.18)' : undefined,
+            }}
           />
           {isLoading && (
-            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-500">
-              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            <div style={{ position: 'absolute', right: 11, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}>
+              <Loader2 style={{ width: 13, height: 13, color: 'var(--text-2)', animation: 'spin 1s linear infinite' }} />
             </div>
           )}
         </div>
@@ -138,7 +154,15 @@ export const AirportSearch: React.FC<AirportSearchProps> = ({
       {isOpen && !selectedAirport && (
         <div
           id={`${id}-dropdown`}
-          className="absolute z-50 mt-1.5 w-full bg-white border border-slate-200 rounded-lg shadow-lg max-h-60 overflow-y-auto divide-y divide-slate-100"
+          style={{
+            position: 'absolute', zIndex: 50, top: 'calc(100% + 6px)', left: 0, right: 0,
+            background: 'rgba(249,247,242,0.97)',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(255,255,255,0.70)',
+            borderRadius: 14,
+            boxShadow: '0 8px 32px rgba(23,32,51,0.12)',
+            maxHeight: 220, overflowY: 'auto',
+          }}
         >
           {results.length > 0 ? (
             results.map((airport) => (
@@ -147,32 +171,38 @@ export const AirportSearch: React.FC<AirportSearchProps> = ({
                 id={`${id}-option-${airport.iata}`}
                 type="button"
                 onClick={() => handleSelect(airport)}
-                className="w-full text-left px-3.5 py-2.5 hover:bg-slate-50 transition-colors flex items-center justify-between group cursor-pointer"
+                style={{
+                  width: '100%', textAlign: 'left', padding: '9px 14px',
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  borderBottom: '1px solid rgba(148,163,184,0.10)',
+                  transition: 'background 130ms',
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = 'rgba(201,221,234,0.22)'}
+                onMouseLeave={e => e.currentTarget.style.background = 'none'}
               >
-                <div className="min-w-0 pr-2">
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold text-xs sm:text-sm text-slate-900 group-hover:text-blue-700 transition-colors">
-                      {airport.city}
-                    </span>
-                    <span className="text-[11px] px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-700 font-mono font-medium">
-                      {airport.iata}
-                    </span>
+                <div style={{ minWidth: 0, paddingRight: 8 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                    <span style={{ fontWeight: 700, fontSize: 12.5, color: 'var(--text)' }}>{airport.city}</span>
+                    <span style={{
+                      fontSize: 10, padding: '2px 6px', borderRadius: 5,
+                      background: 'rgba(30,41,59,0.08)', color: 'var(--text-2)',
+                      fontFamily: 'JetBrains Mono, monospace', fontWeight: 600,
+                    }}>{airport.iata}</span>
                   </div>
-                  <div className="text-xs text-slate-500 truncate mt-0.5">{airport.name}</div>
+                  <div style={{ fontSize: 11, color: 'var(--text-2)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginTop: 1 }}>{airport.name}</div>
                 </div>
-                <div className="text-right flex-shrink-0">
-                  <span className="text-[11px] text-slate-400 block">{airport.country}</span>
-                </div>
+                <div style={{ fontSize: 11, color: 'var(--text-3)', flexShrink: 0 }}>{airport.country}</div>
               </button>
             ))
           ) : query.trim().length > 0 && !isLoading ? (
-            <div className="px-4 py-3 text-center text-xs text-slate-500">
-              No matching airports found for "{query}".
+            <div style={{ padding: '12px 14px', textAlign: 'center', fontSize: 12, color: 'var(--text-2)' }}>
+              No airports found for &ldquo;{query}&rdquo;
             </div>
           ) : (
-            <div className="px-4 py-2.5 text-xs text-slate-500 flex items-center gap-2">
-              <MapPin className="w-3.5 h-3.5 text-slate-400" />
-              <span>Search by city name (e.g. "Mumbai") or 3-letter IATA ("BOM")</span>
+            <div style={{ padding: '10px 14px', fontSize: 11.5, color: 'var(--text-2)', display: 'flex', alignItems: 'center', gap: 7 }}>
+              <MapPin style={{ width: 12, height: 12, color: 'var(--text-3)' }} />
+              Search by city name (e.g. &ldquo;Mumbai&rdquo;) or IATA code (&ldquo;BOM&rdquo;)
             </div>
           )}
         </div>

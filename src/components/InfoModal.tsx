@@ -1,158 +1,255 @@
-import React from 'react';
-import { X, BookOpen, ShieldAlert, Scale, Cpu, CheckCircle2, AlertTriangle, ExternalLink } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, BookOpen, Shield, Scale, Sparkles, CheckCircle2, ArrowRight } from 'lucide-react';
 
 interface InfoModalProps {
   isOpen: boolean;
   onClose: () => void;
+  defaultTab?: 'about' | 'rights' | 'how-it-works';
 }
 
-export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose }) => {
+export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose, defaultTab = 'about' }) => {
+  const [activeTab, setActiveTab] = useState<'about' | 'rights' | 'how-it-works'>(defaultTab);
+
+  React.useEffect(() => {
+    if (isOpen) setActiveTab(defaultTab);
+  }, [isOpen, defaultTab]);
+
   if (!isOpen) return null;
 
   return (
-    <div id="info-modal-backdrop" className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-fade-in">
-      <div className="bg-white border border-slate-200 rounded-2xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-xl overflow-hidden text-slate-800">
-        {/* Modal Header */}
-        <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between gap-3 bg-slate-50">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-slate-200/80 flex items-center justify-center text-slate-800">
-              <Scale className="w-4 h-4" />
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 100,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '16px',
+        background: 'rgba(17, 24, 39, 0.55)',
+        backdropFilter: 'blur(10px)',
+      }}
+      className="ff-fadeup"
+      onClick={e => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <div
+        style={{
+          width: '100%',
+          maxWidth: 640,
+          maxHeight: '88dvh',
+          background: 'rgba(252, 252, 250, 0.97)',
+          backdropFilter: 'blur(24px)',
+          borderRadius: 24,
+          border: '1px solid rgba(255, 255, 255, 0.80)',
+          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.18)',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Header */}
+        <div style={{
+          padding: '16px 20px',
+          borderBottom: '1px solid rgba(148, 163, 184, 0.15)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexShrink: 0,
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{
+              width: 34, height: 34,
+              borderRadius: 10,
+              background: 'var(--navy)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 2px 8px rgba(26, 35, 50, 0.20)',
+            }}>
+              <Shield style={{ width: 16, height: 16, color: '#F9F8F6' }} />
             </div>
             <div>
-              <h2 className="text-sm sm:text-base font-semibold text-slate-900">
-                Aviation Rights & WebMCP Guide
-              </h2>
-              <p className="text-xs text-slate-500">
-                DGCA CAR (India), EU261, UK261, and WebMCP standards
-              </p>
+              <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em' }}>
+                FlightClaims Guide
+              </div>
+              <div style={{ fontSize: 11, color: 'var(--text-2)' }}>
+                Your rights, regulations, and how it works
+              </div>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+            style={{
+              width: 30, height: 30,
+              borderRadius: 8,
+              border: 'none',
+              background: 'rgba(148, 163, 184, 0.14)',
+              cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: 'var(--text-2)',
+            }}
           >
-            <X className="w-5 h-5" />
+            <X style={{ width: 15, height: 15 }} />
           </button>
         </div>
 
-        {/* Modal Scroll Content */}
-        <div className="p-4 sm:p-5 overflow-y-auto space-y-6 text-xs leading-relaxed">
-          {/* Section 1: DGCA India Passenger Charter */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-              <BookOpen className="w-4 h-4 text-slate-700" />
-              <span>1. Directorate General of Civil Aviation (DGCA) India – CAR Section 3, Series M, Part IV</span>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              {/* Delays */}
-              <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-1.5">
-                <h4 className="font-semibold text-slate-900 uppercase text-[11px]">
-                  Flight Delays
-                </h4>
-                <p className="text-slate-600 text-xs leading-relaxed">
-                  • <strong>Delay 2h+</strong> (block time ≤ 2.5h): Free meals &amp; refreshments.<br />
-                  • <strong>Delay 3h+</strong> (block time 2.5–5h): Free meals &amp; refreshments.<br />
-                  • <strong>Delay 4h+</strong> (block time &gt; 5h): Free meals &amp; refreshments.<br />
-                  • <strong>Delay 6h+</strong>: Alternate flight within 6h OR 100% refund.<br />
-                  • <strong>Overnight delay</strong>: Free hotel + airport transfers.
-                </p>
-              </div>
-
-              {/* Cancellations */}
-              <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-1.5">
-                <h4 className="font-semibold text-slate-900 uppercase text-[11px]">
-                  Cancellations (Under 24h Notice)
-                </h4>
-                <p className="text-slate-600 text-xs leading-relaxed">
-                  • <strong>Block time ≤ 1 hr:</strong> ₹5,000 or Basic Fare + Fuel Charge.<br />
-                  • <strong>Block time 1–2 hrs:</strong> ₹7,500 or Basic Fare + Fuel Charge.<br />
-                  • <strong>Block time &gt; 2 hrs:</strong> ₹10,000 or Basic Fare + Fuel Charge.<br />
-                  • <em>(Whichever is lower in all tiers)</em> + Full Refund.
-                </p>
-              </div>
-
-              {/* Denied Boarding */}
-              <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-1.5">
-                <h4 className="font-semibold text-slate-900 uppercase text-[11px]">
-                  Denied Boarding (Overbooking)
-                </h4>
-                <p className="text-slate-600 text-xs leading-relaxed">
-                  • <strong>Within 1 hr:</strong> No compensation.<br />
-                  • <strong>Within 24 hrs:</strong> 200% Basic Fare + Fuel Charge (max ₹10,000) + ticket.<br />
-                  • <strong>&gt; 24 hrs / Declined:</strong> 400% Basic Fare + Fuel Charge (max ₹20,000) + refund.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Section 2: EU261 & UK261 Regulation Matrix */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-              <Scale className="w-4 h-4 text-slate-700" />
-              <span>2. European Union (EC 261/2004) & UK261 Statutory Compensation</span>
-            </div>
-            <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead>
-                  <tr className="border-b border-slate-200 text-slate-500">
-                    <th className="pb-2 font-semibold uppercase text-[10px] tracking-wider">Flight Distance</th>
-                    <th className="pb-2 font-semibold uppercase text-[10px] tracking-wider">EU261 Payout</th>
-                    <th className="pb-2 font-semibold uppercase text-[10px] tracking-wider">UK261 Payout</th>
-                    <th className="pb-2 font-semibold uppercase text-[10px] tracking-wider">Delay Threshold</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200/60">
-                  <tr>
-                    <td className="py-2 font-medium text-slate-800">Up to 1,500 km</td>
-                    <td className="py-2 text-emerald-700 font-semibold">€250</td>
-                    <td className="py-2 text-slate-900 font-semibold">£220</td>
-                    <td className="py-2 text-slate-600">3+ hours arrival delay</td>
-                  </tr>
-                  <tr>
-                    <td className="py-2 font-medium text-slate-800">1,500 km to 3,500 km</td>
-                    <td className="py-2 text-emerald-700 font-semibold">€400</td>
-                    <td className="py-2 text-slate-900 font-semibold">£350</td>
-                    <td className="py-2 text-slate-600">3+ hours arrival delay</td>
-                  </tr>
-                  <tr>
-                    <td className="py-2 font-medium text-slate-800">Over 3,500 km</td>
-                    <td className="py-2 text-emerald-700 font-semibold">€600</td>
-                    <td className="py-2 text-slate-900 font-semibold">£520</td>
-                    <td className="py-2 text-slate-600">4+ hours arrival delay</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* Section 3: WebMCP Protocol Architecture */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-              <Cpu className="w-4 h-4 text-slate-700" />
-              <span>3. WebMCP (Web Model Context Protocol) & AI Governance</span>
-            </div>
-            <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-2 text-xs text-slate-700">
-              <p>
-                FlightFixer implements the W3C WebMCP draft specification. It exposes structured tools through <code className="text-slate-900 font-mono font-medium">navigator.modelContext.registerTool()</code> (in Chrome 146+ environments) and the in-window WebMCP dispatcher <code className="text-slate-900 font-mono font-medium">window.__WEBMCP__</code>.
-              </p>
-              <p>
-                <strong>Human-in-the-Loop Guard:</strong> The <code className="text-amber-800 font-mono font-medium">approve_and_fill_demo_form</code> tool is strictly guarded by passenger authorization. An AI agent cannot populate or submit grievance forms without explicit human review and approval of the drafted notice.
-              </p>
-            </div>
-          </div>
+        {/* Tab Navigation */}
+        <div style={{
+          display: 'flex',
+          gap: 6,
+          padding: '10px 20px',
+          background: 'rgba(238, 243, 240, 0.60)',
+          borderBottom: '1px solid rgba(148, 163, 184, 0.12)',
+          flexShrink: 0,
+        }}>
+          {[
+            { id: 'about', label: 'About FlightClaims' },
+            { id: 'rights', label: 'Passenger Rights' },
+            { id: 'how-it-works', label: 'How It Works' },
+          ].map(t => (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => setActiveTab(t.id as any)}
+              style={{
+                padding: '6px 13px',
+                borderRadius: 9999,
+                fontSize: 12,
+                fontWeight: 600,
+                border: 'none',
+                cursor: 'pointer',
+                background: activeTab === t.id ? 'var(--navy)' : 'transparent',
+                color: activeTab === t.id ? '#FFFFFF' : 'var(--text-2)',
+                transition: 'all 150ms ease',
+              }}
+            >
+              {t.label}
+            </button>
+          ))}
         </div>
 
-        {/* Modal Footer */}
-        <div className="p-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between text-xs text-slate-500">
-          <span>FlightFixer Informational Aviation Rights System</span>
+        {/* Modal Scroll Content */}
+        <div style={{ flex: 1, overflowY: 'auto', padding: '20px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+
+          {/* TAB 1: ABOUT */}
+          {activeTab === 'about' && (
+            <div className="ff-fadeup" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <div>
+                <h3 className="ff-display" style={{ fontSize: 20, color: 'var(--text)', marginBottom: 6 }}>
+                  Built for frustrated flyers.
+                </h3>
+                <p style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.6 }}>
+                  Airlines hide their compensation rules inside 50-page PDFs and complex claim portals. Most passengers never claim the ₹5,000–₹10,000 or €250–€600 they are legally owed.
+                </p>
+              </div>
+
+              <div style={{
+                padding: '14px 16px',
+                borderRadius: 14,
+                background: 'rgba(255, 255, 255, 0.75)',
+                border: '1px solid rgba(148, 163, 184, 0.16)',
+                display: 'flex', flexDirection: 'column', gap: 10,
+              }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <Sparkles style={{ width: 14, height: 14, color: 'var(--amber)' }} /> What FlightClaims does:
+                </div>
+                <ul style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.6, paddingLeft: 18, margin: 0 }}>
+                  <li>Calculates exact statutory amounts based on official DGCA CAR (India) and EU261/UK261 guidelines.</li>
+                  <li>Drafts a complete, legally sound grievance notice quoting the exact statutory clauses and flight facts.</li>
+                  <li>Finds the exact nodal grievance officer email for your airline so you can send it in 1 click.</li>
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 2: PASSENGER RIGHTS */}
+          {activeTab === 'rights' && (
+            <div className="ff-fadeup" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              {/* DGCA India */}
+              <div style={{
+                padding: '14px 16px',
+                borderRadius: 14,
+                background: 'rgba(255, 255, 255, 0.75)',
+                border: '1px solid rgba(148, 163, 184, 0.16)',
+              }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <Scale style={{ width: 14, height: 14, color: 'var(--sky)' }} /> DGCA CAR (India Domestic)
+                </div>
+                <div style={{ fontSize: 12, color: 'var(--text-2)', lineHeight: 1.6, display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  <div>• <strong>Delays (2–4h+):</strong> Free meals, refreshments, and duty of care at airport.</div>
+                  <div>• <strong>Cancellations (&lt;24h):</strong> Up to ₹5,000–₹10,000 statutory compensation or alternate flight + full refund.</div>
+                  <div>• <strong>Denied Boarding (Overbooking):</strong> Up to 400% of basic fare (max ₹20,000) or full refund.</div>
+                </div>
+              </div>
+
+              {/* EU261 & UK261 */}
+              <div style={{
+                padding: '14px 16px',
+                borderRadius: 14,
+                background: 'rgba(255, 255, 255, 0.75)',
+                border: '1px solid rgba(148, 163, 184, 0.16)',
+              }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <BookOpen style={{ width: 14, height: 14, color: 'var(--success)' }} /> EU261 &amp; UK261 (European Flights)
+                </div>
+                <div style={{ fontSize: 12, color: 'var(--text-2)', lineHeight: 1.6, display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  <div>• <strong>Short Flights (&lt; 1,500 km):</strong> €250 / £220 fixed compensation.</div>
+                  <div>• <strong>Medium Flights (1,500–3,500 km):</strong> €400 / £350 fixed compensation.</div>
+                  <div>• <strong>Long Haul (&gt; 3,500 km):</strong> €600 / £520 fixed compensation.</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 3: HOW IT WORKS */}
+          {activeTab === 'how-it-works' && (
+            <div className="ff-fadeup" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {[
+                { step: '1', title: 'Enter your flight details', desc: 'Pick whether you were delayed, cancelled, or denied boarding, and enter your airline & PNR.' },
+                { step: '2', title: 'Instant Legal Calculation', desc: 'Our engine applies real aviation distance formulas and regulations to calculate what you are owed.' },
+                { step: '3', title: 'One-Click Official Letter', desc: 'Get a ready-to-send grievance letter with the exact airline grievance email address pre-filled.' },
+              ].map(s => (
+                <div key={s.step} style={{
+                  display: 'flex',
+                  gap: 12,
+                  padding: '12px 14px',
+                  borderRadius: 12,
+                  background: 'rgba(255, 255, 255, 0.70)',
+                  border: '1px solid rgba(148, 163, 184, 0.14)',
+                }}>
+                  <div style={{
+                    width: 26, height: 26, borderRadius: '50%',
+                    background: 'var(--navy)', color: '#fff',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 12, fontWeight: 700, flexShrink: 0,
+                  }}>
+                    {s.step}
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>{s.title}</div>
+                    <div style={{ fontSize: 12, color: 'var(--text-2)', marginTop: 2 }}>{s.desc}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+        </div>
+
+        {/* Footer */}
+        <div style={{
+          padding: '12px 20px',
+          borderTop: '1px solid rgba(148, 163, 184, 0.12)',
+          background: 'rgba(238, 243, 240, 0.70)',
+          display: 'flex',
+          justifyContent: 'flex-end',
+        }}>
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-medium transition-colors cursor-pointer"
+            className="ff-btn-primary"
+            style={{ fontSize: 12, padding: '7px 16px' }}
           >
-            Got it
+            Close Guide
           </button>
         </div>
       </div>

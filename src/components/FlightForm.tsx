@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plane, Calendar, Hash, Building2, MapPin, ArrowRight, User, Mail, ShieldCheck } from 'lucide-react';
+import { Calendar, Hash, ArrowRight, User, Mail, ShieldCheck } from 'lucide-react';
 import { FlightCase, Airport } from '../types';
 import { AirportSearch } from './AirportSearch';
 import { DisruptionDetails } from './DisruptionDetails';
@@ -11,212 +11,162 @@ interface FlightFormProps {
   currencyCode: 'INR' | 'EUR' | 'GBP' | 'USD';
 }
 
-export const FlightForm: React.FC<FlightFormProps> = ({
-  flightCase,
-  onChange,
-  currencyCode
-}) => {
+export const FlightForm: React.FC<FlightFormProps> = ({ flightCase, onChange, currencyCode }) => {
   const distanceKm = calculateHaversineDistance(flightCase.origin, flightCase.destination);
   const formattedDistance = formatDistanceString(distanceKm);
-  const isSameAirport = flightCase.origin && flightCase.destination && flightCase.origin.iata === flightCase.destination.iata;
+  const isSameAirport = flightCase.origin && flightCase.destination &&
+    flightCase.origin.iata === flightCase.destination.iata;
 
   const popularAirlines = [
-    'IndiGo',
-    'Air India',
-    'SpiceJet',
-    'Akasa Air',
-    'Air India Express',
-    'British Airways',
-    'Lufthansa',
-    'Emirates',
-    'Singapore Airlines'
+    'IndiGo', 'Air India', 'SpiceJet', 'Akasa Air', 'Air India Express',
+    'British Airways', 'Lufthansa', 'Emirates', 'Singapore Airlines'
   ];
 
   return (
-    <div id="flight-case-form" className="bg-white border border-slate-200/80 rounded-xl p-5 sm:p-6 space-y-6 shadow-xs">
-      <div className="border-b border-slate-100 pb-3">
-        <h2 className="text-sm font-semibold text-slate-900">
-          Tell us about your flight
+    <div id="flight-case-form" className="ff-card" style={{ padding: '22px 22px 24px' }}>
+      {/* Header */}
+      <div style={{ marginBottom: 20, paddingBottom: 16, borderBottom: '1px solid rgba(148,163,184,0.15)' }}>
+        <h2 style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em', marginBottom: 3 }}>
+          Your Flight
         </h2>
-        <p className="text-xs text-slate-500 mt-0.5">
-          Provide your flight details to begin.
+        <p style={{ fontSize: 12, color: 'var(--text-2)', lineHeight: 1.5 }}>
+          Enter your details — we'll look up the rest.
         </p>
       </div>
 
-      {/* STEP 1: YOUR FLIGHT */}
-      <div className="space-y-4">
-        {/* Airline & Flight Number */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        {/* Airline + Flight Number */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
           <div>
-            <label htmlFor="airline-input" className="block text-[11px] font-medium text-slate-600 mb-1">
-              Airline
-            </label>
-            <div className="relative">
-              <input
-                id="airline-input"
-                type="text"
-                list="airlines-datalist"
-                placeholder="e.g. IndiGo, Air India"
-                value={flightCase.airline}
-                onChange={(e) => onChange({ airline: e.target.value })}
-                className="w-full px-3 py-2 bg-slate-50/60 border border-slate-200 rounded-lg text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-800 focus:bg-white focus:ring-1 focus:ring-slate-800 transition-colors"
-              />
-              <datalist id="airlines-datalist">
-                {popularAirlines.map(a => <option key={a} value={a} />)}
-              </datalist>
-            </div>
+            <label className="ff-label-field">Airline</label>
+            <input
+              id="airline-input"
+              type="text"
+              list="airlines-datalist"
+              placeholder="e.g. IndiGo"
+              value={flightCase.airline}
+              onChange={(e) => onChange({ airline: e.target.value })}
+              className="ff-input"
+            />
+            <datalist id="airlines-datalist">
+              {popularAirlines.map(a => <option key={a} value={a} />)}
+            </datalist>
           </div>
-
           <div>
-            <label htmlFor="flight-number-input" className="block text-[11px] font-medium text-slate-600 mb-1">
-              Flight Number
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                <Hash className="w-3.5 h-3.5" />
-              </div>
+            <label className="ff-label-field">Flight Number</label>
+            <div style={{ position: 'relative' }}>
+              <Hash style={{ position: 'absolute', left: 11, top: '50%', transform: 'translateY(-50%)', width: 13, height: 13, color: 'var(--text-3)', pointerEvents: 'none' }} />
               <input
                 id="flight-number-input"
                 type="text"
-                placeholder="e.g. 6E-204"
+                placeholder="6E-204"
                 value={flightCase.flightNumber}
                 onChange={(e) => onChange({ flightNumber: e.target.value.toUpperCase() })}
-                className="w-full pl-8 pr-3 py-2 bg-slate-50/60 border border-slate-200 rounded-lg text-xs sm:text-sm text-slate-900 placeholder-slate-400 font-mono uppercase focus:outline-none focus:border-slate-800 focus:bg-white focus:ring-1 focus:ring-slate-800 transition-colors"
+                className="ff-input"
+                style={{ paddingLeft: 30, fontFamily: 'JetBrains Mono, monospace', textTransform: 'uppercase' }}
               />
             </div>
           </div>
         </div>
 
-        {/* Origin & Destination Airport Searches */}
-        <div className="space-y-3">
+        {/* Origin → Destination */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           <AirportSearch
             id="origin-airport"
-            label="Origin Airport (Departure)"
+            label="Departure Airport"
             placeholder="Search city or IATA (e.g. Delhi, DEL)"
             selectedAirport={flightCase.origin}
             onSelectAirport={(airport) => onChange({ origin: airport })}
           />
-
           <AirportSearch
             id="destination-airport"
-            label="Destination Airport (Arrival)"
+            label="Arrival Airport"
             placeholder="Search city or IATA (e.g. Mumbai, BOM)"
             selectedAirport={flightCase.destination}
             onSelectAirport={(airport) => onChange({ destination: airport })}
-            error={isSameAirport ? 'Origin and Destination cannot be the same airport.' : undefined}
+            error={isSameAirport ? 'Origin and destination cannot be the same.' : undefined}
           />
         </div>
 
-        {/* Route Distance Banner (Auto-calculated via Haversine) */}
+        {/* Route distance pill */}
         {flightCase.origin && flightCase.destination && !isSameAirport && (
           <div
             id="route-distance-badge"
-            className="flex items-center justify-between p-3 rounded-lg bg-slate-50 border border-slate-200/80 text-slate-700 text-xs"
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '10px 14px',
+              borderRadius: 12,
+              background: 'rgba(201,221,234,0.22)',
+              border: '1px solid rgba(157,189,212,0.28)',
+            }}
           >
-            <div className="flex items-center gap-2">
-              <span className="font-semibold text-slate-900">
-                {flightCase.origin.city} ({flightCase.origin.iata})
-              </span>
-              <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
-              <span className="font-semibold text-slate-900">
-                {flightCase.destination.city} ({flightCase.destination.iata})
-              </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, fontWeight: 600, color: 'var(--text)' }}>
+              <span>{flightCase.origin.city} ({flightCase.origin.iata})</span>
+              <ArrowRight style={{ width: 13, height: 13, color: 'var(--sky)', flexShrink: 0 }} />
+              <span>{flightCase.destination.city} ({flightCase.destination.iata})</span>
             </div>
-            <div className="text-right">
-              <span className="font-mono font-semibold text-slate-900">{formattedDistance}</span>
-              <span className="block text-[10px] text-slate-500">Auto-calculated route distance</span>
-            </div>
+            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, fontWeight: 600, color: 'var(--text-2)' }}>
+              {formattedDistance}
+            </span>
           </div>
         )}
 
-        {/* Flight Date */}
+        {/* Date */}
         <div>
-          <label htmlFor="flight-date-input" className="block text-[11px] font-medium text-slate-600 mb-1">
-            Flight Date
-          </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-              <Calendar className="w-3.5 h-3.5" />
-            </div>
+          <label htmlFor="flight-date-input" className="ff-label-field">Flight Date</label>
+          <div style={{ position: 'relative' }}>
+            <Calendar style={{ position: 'absolute', left: 11, top: '50%', transform: 'translateY(-50%)', width: 13, height: 13, color: 'var(--text-3)', pointerEvents: 'none' }} />
             <input
               id="flight-date-input"
               type="date"
               value={flightCase.flightDate}
               onChange={(e) => onChange({ flightDate: e.target.value })}
-              className="w-full pl-9 pr-3 py-2 bg-slate-50/60 border border-slate-200 rounded-lg text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-slate-800 focus:bg-white focus:ring-1 focus:ring-slate-800 transition-colors"
+              className="ff-input"
+              style={{ paddingLeft: 30 }}
             />
           </div>
         </div>
-      </div>
 
-      {/* STEP 2: WHAT HAPPENED? */}
-      <DisruptionDetails
-        flightCase={flightCase}
-        onChange={onChange}
-        currencyCode={currencyCode}
-      />
+        {/* Disruption */}
+        <DisruptionDetails flightCase={flightCase} onChange={onChange} currencyCode={currencyCode} />
 
-      {/* PASSENGER DETAILS (For Official Request / Claim Drafting) */}
-      <div className="border-t border-slate-100 pt-4 space-y-3">
-        <label className="block text-[11px] font-semibold text-slate-700 uppercase tracking-wider">
-          Passenger Information (Optional for Drafts)
-        </label>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label htmlFor="passenger-name" className="block text-[11px] font-medium text-slate-600 mb-1">
-              Passenger Full Name
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                <User className="w-3.5 h-3.5" />
-              </div>
-              <input
-                id="passenger-name"
-                type="text"
-                placeholder="e.g. Rahul Sharma"
-                value={flightCase.passengerName}
-                onChange={(e) => onChange({ passengerName: e.target.value })}
-                className="w-full pl-8 pr-3 py-2 bg-slate-50/60 border border-slate-200 rounded-lg text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-800 focus:bg-white focus:ring-1 focus:ring-slate-800 transition-colors"
-              />
-            </div>
+        {/* Passenger details divider */}
+        <div style={{ paddingTop: 4, borderTop: '1px solid rgba(148,163,184,0.15)' }}>
+          <div style={{ marginBottom: 12 }}>
+            <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+              Your Details
+            </span>
+            <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 2 }}>For your personalised claim letter</p>
           </div>
 
-          <div>
-            <label htmlFor="booking-reference-pnr" className="block text-[11px] font-medium text-slate-600 mb-1">
-              Booking Reference (PNR)
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                <ShieldCheck className="w-3.5 h-3.5" />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              <div>
+                <label htmlFor="passenger-name" className="ff-label-field">Your Full Name</label>
+                <div style={{ position: 'relative' }}>
+                  <User style={{ position: 'absolute', left: 11, top: '50%', transform: 'translateY(-50%)', width: 13, height: 13, color: 'var(--text-3)', pointerEvents: 'none' }} />
+                  <input id="passenger-name" type="text" placeholder="e.g. Rahul Sharma" value={flightCase.passengerName}
+                    onChange={(e) => onChange({ passengerName: e.target.value })} className="ff-input" style={{ paddingLeft: 30 }} />
+                </div>
               </div>
-              <input
-                id="booking-reference-pnr"
-                type="text"
-                placeholder="e.g. 6E9K2A"
-                value={flightCase.bookingReference}
-                onChange={(e) => onChange({ bookingReference: e.target.value.toUpperCase() })}
-                className="w-full pl-8 pr-3 py-2 bg-slate-50/60 border border-slate-200 rounded-lg text-xs sm:text-sm text-slate-900 placeholder-slate-400 font-mono uppercase focus:outline-none focus:border-slate-800 focus:bg-white focus:ring-1 focus:ring-slate-800 transition-colors"
-              />
+              <div>
+                <label htmlFor="booking-reference-pnr" className="ff-label-field">Booking Reference</label>
+                <div style={{ position: 'relative' }}>
+                  <ShieldCheck style={{ position: 'absolute', left: 11, top: '50%', transform: 'translateY(-50%)', width: 13, height: 13, color: 'var(--text-3)', pointerEvents: 'none' }} />
+                  <input id="booking-reference-pnr" type="text" placeholder="e.g. 6E9K2A" value={flightCase.bookingReference}
+                    onChange={(e) => onChange({ bookingReference: e.target.value.toUpperCase() })} className="ff-input"
+                    style={{ paddingLeft: 30, fontFamily: 'JetBrains Mono, monospace', textTransform: 'uppercase' }} />
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-
-        <div>
-          <label htmlFor="passenger-email" className="block text-[11px] font-medium text-slate-600 mb-1">
-            Passenger Email
-          </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-              <Mail className="w-3.5 h-3.5" />
+            <div>
+              <label htmlFor="passenger-email" className="ff-label-field">Your Email Address</label>
+              <div style={{ position: 'relative' }}>
+                <Mail style={{ position: 'absolute', left: 11, top: '50%', transform: 'translateY(-50%)', width: 13, height: 13, color: 'var(--text-3)', pointerEvents: 'none' }} />
+                <input id="passenger-email" type="email" placeholder="e.g. rahul@gmail.com" value={flightCase.passengerEmail}
+                  onChange={(e) => onChange({ passengerEmail: e.target.value })} className="ff-input" style={{ paddingLeft: 30 }} />
+              </div>
             </div>
-            <input
-              id="passenger-email"
-              type="email"
-              placeholder="e.g. rahul.sharma@example.com"
-              value={flightCase.passengerEmail}
-              onChange={(e) => onChange({ passengerEmail: e.target.value })}
-              className="w-full pl-8 pr-3 py-2 bg-slate-50/60 border border-slate-200 rounded-lg text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-800 focus:bg-white focus:ring-1 focus:ring-slate-800 transition-colors"
-            />
           </div>
         </div>
       </div>

@@ -9,90 +9,76 @@ interface CompensationCardProps {
 }
 
 export const CompensationCard: React.FC<CompensationCardProps> = ({
-  financialRecovery,
-  jurisdictionLabel,
-  hasEnoughData
+  financialRecovery, jurisdictionLabel, hasEnoughData
 }) => {
-  const getCurrencyIcon = () => {
-    switch (financialRecovery.currency) {
-      case 'EUR': return <Euro className="w-5 h-5 text-emerald-400" />;
-      case 'GBP': return <PoundSterling className="w-5 h-5 text-indigo-400" />;
-      case 'USD': return <DollarSign className="w-5 h-5 text-blue-400" />;
-      case 'INR':
-      default:
-        return <IndianRupee className="w-5 h-5 text-emerald-400" />;
-    }
-  };
+  const CurrencyIcon = {
+    EUR: Euro, GBP: PoundSterling, USD: DollarSign, INR: IndianRupee
+  }[financialRecovery.currency] ?? IndianRupee;
 
-  const getStatusBadge = () => {
-    switch (financialRecovery.status) {
-      case 'Potential Compensation':
-      case 'Estimated Maximum':
-        return {
-          label: financialRecovery.status,
-          bg: 'bg-emerald-50 border-emerald-200 text-emerald-800',
-          icon: CheckCircle2
-        };
-      case 'Refund & Care Eligible':
-        return {
-          label: 'Refund & Care Eligible',
-          bg: 'bg-blue-50 border-blue-200 text-blue-800',
-          icon: ShieldCheck
-        };
-      case 'Not Yet Confirmed':
-        return {
-          label: 'Pending Info',
-          bg: 'bg-amber-50 border-amber-200 text-amber-800',
-          icon: AlertTriangle
-        };
-      case 'No Estimate Available':
-      default:
-        return {
-          label: 'Duty of Care Relief',
-          bg: 'bg-slate-100 border-slate-200 text-slate-700',
-          icon: HelpCircle
-        };
-    }
-  };
+  const hasAmount = !!financialRecovery.formattedRange;
 
-  const statusBadge = getStatusBadge();
-  const StatusIcon = statusBadge.icon;
+  const STATUS = {
+    'Potential Compensation': { pill: 'ff-pill-success', icon: CheckCircle2 },
+    'Estimated Maximum':      { pill: 'ff-pill-success', icon: CheckCircle2 },
+    'Refund & Care Eligible': { pill: 'ff-pill-info',    icon: ShieldCheck },
+    'Not Yet Confirmed':      { pill: 'ff-pill-warn',    icon: AlertTriangle },
+    'No Estimate Available':  { pill: 'ff-pill-neutral', icon: HelpCircle },
+  };
+  const s = STATUS[financialRecovery.status] ?? STATUS['No Estimate Available'];
+  const SIcon = s.icon;
 
   return (
-    <div id="financial-recovery-card" className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3">
-      <div className="flex items-center justify-between gap-2">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-700">
-          Possible Financial Recovery
-        </span>
-        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium border ${statusBadge.bg}`}>
-          <StatusIcon className="w-3 h-3" />
-          {statusBadge.label}
+    <div id="financial-recovery-card" style={{
+      padding: '14px 16px', borderRadius: 16,
+      background: hasAmount
+        ? 'linear-gradient(135deg, rgba(230,184,106,0.10) 0%, rgba(249,247,242,0.85) 100%)'
+        : 'rgba(238,243,247,0.60)',
+      border: hasAmount ? '1px solid rgba(230,184,106,0.28)' : '1px solid rgba(148,163,184,0.18)',
+      position: 'relative',
+    }}>
+      {/* Amber glow behind compensation number */}
+      {hasAmount && (
+        <div style={{
+          position: 'absolute', top: 0, left: 0, right: 0, height: 60,
+          borderRadius: 16,
+          background: 'radial-gradient(ellipse at 30% 0%, rgba(230,184,106,0.16) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }} />
+      )}
+
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+        <span className="ff-label">Possible Recovery</span>
+        <span className={`ff-pill ${s.pill}`}>
+          <SIcon style={{ width: 10, height: 10 }} />
+          {financialRecovery.status}
         </span>
       </div>
 
-      {financialRecovery.formattedRange ? (
-        <div className="flex items-baseline gap-2 pt-0.5">
-          <div className="flex items-center text-2xl sm:text-3xl font-bold text-slate-900 font-mono tracking-tight">
+      {hasAmount ? (
+        <div style={{ marginBottom: 8 }}>
+          <div style={{
+            fontSize: 30, fontWeight: 800, color: 'var(--text)',
+            letterSpacing: '-0.03em', lineHeight: 1, fontFamily: 'Inter, sans-serif',
+          }}>
             {financialRecovery.formattedRange}
           </div>
-          <span className="text-xs text-slate-500 font-medium">
-            (Estimated Statutory Relief)
-          </span>
+          <div style={{ fontSize: 11, color: 'var(--text-2)', marginTop: 4 }}>Estimated statutory relief</div>
         </div>
       ) : (
-        <div className="pt-0.5">
-          <div className="text-base font-semibold text-slate-900">
-            {financialRecovery.status === 'Not Yet Confirmed' ? 'Calculation Pending Info' : 'Duty of Care / Relief'}
-          </div>
+        <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>
+          {financialRecovery.status === 'Not Yet Confirmed' ? 'Pending More Info' : 'Duty of Care Available'}
         </div>
       )}
 
-      <p className="text-xs text-slate-600 leading-relaxed">
+      <p style={{ fontSize: 11.5, color: 'var(--text-2)', lineHeight: 1.6, marginBottom: 8 }}>
         {financialRecovery.details}
       </p>
 
-      <div className="text-[11px] text-slate-500 pt-2 border-t border-slate-200/60">
-        Applicable Framework: <strong className="text-slate-700 font-semibold">{jurisdictionLabel}</strong>
+      <div style={{
+        paddingTop: 8, borderTop: '1px solid rgba(148,163,184,0.15)',
+        fontSize: 11, color: 'var(--text-3)',
+      }}>
+        Framework: <strong style={{ color: 'var(--text-2)' }}>{jurisdictionLabel}</strong>
       </div>
     </div>
   );

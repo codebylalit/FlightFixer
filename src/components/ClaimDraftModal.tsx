@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Check, Copy, Download, ShieldCheck, AlertCircle, Edit3, Sparkles } from 'lucide-react';
+import { X, Check, Copy, Download, ShieldCheck, Edit3, Sparkles } from 'lucide-react';
 import { ClaimDraft } from '../types';
 
 interface ClaimDraftModalProps {
@@ -10,10 +10,7 @@ interface ClaimDraftModalProps {
 }
 
 export const ClaimDraftModal: React.FC<ClaimDraftModalProps> = ({
-  draft,
-  isOpen,
-  onClose,
-  onApproveDraft
+  draft, isOpen, onClose, onApproveDraft
 }) => {
   if (!isOpen || !draft) return null;
 
@@ -31,64 +28,100 @@ export const ClaimDraftModal: React.FC<ClaimDraftModalProps> = ({
     const element = document.createElement('a');
     const file = new Blob([`Subject: ${subject}\n\n${letterBody}`], { type: 'text/plain' });
     element.href = URL.createObjectURL(file);
-    element.download = `FlightFixer_Claim_${draft.flightNumber}_${draft.bookingReference}.txt`;
+    element.download = `FlightClaims_Claim_${draft.flightNumber}_${draft.bookingReference}.txt`;
     document.body.appendChild(element);
     element.click();
     document.body.removeChild(element);
   };
 
   const handleSaveAndApprove = () => {
-    const updated: ClaimDraft = {
-      ...draft,
-      subject,
-      letterBody,
-      isApprovedByPassenger: true
-    };
+    const updated: ClaimDraft = { ...draft, subject, letterBody, isApprovedByPassenger: true };
     onApproveDraft(updated);
     onClose();
   };
 
   return (
-    <div id="claim-draft-modal" className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-fade-in">
-      <div className="bg-white border border-slate-200 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-xl overflow-hidden">
+    <div
+      id="claim-draft-modal"
+      style={{
+        position: 'fixed', inset: 0, zIndex: 50,
+        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px',
+        background: 'rgba(23,32,51,0.45)', backdropFilter: 'blur(8px)',
+      }}
+      className="ff-fadeup"
+    >
+      <div style={{
+        background: 'rgba(249,247,242,0.95)',
+        backdropFilter: 'blur(20px)',
+        border: '1px solid rgba(255,255,255,0.70)',
+        borderRadius: 24,
+        width: '100%', maxWidth: 680,
+        maxHeight: '90dvh',
+        display: 'flex', flexDirection: 'column',
+        boxShadow: '0 24px 80px rgba(23,32,51,0.22)',
+        overflow: 'hidden',
+      }}>
+
         {/* Header */}
-        <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between gap-3 bg-slate-50">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-slate-200/80 flex items-center justify-center text-slate-800">
-              <ShieldCheck className="w-4 h-4" />
+        <div style={{
+          padding: '18px 22px',
+          borderBottom: '1px solid rgba(148,163,184,0.15)',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
+          background: 'rgba(238,243,247,0.70)',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{
+              width: 38, height: 38, borderRadius: 12,
+              background: 'var(--navy)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 2px 10px rgba(30,41,59,0.22)',
+            }}>
+              <ShieldCheck style={{ width: 18, height: 18, color: '#F9F7F2' }} />
             </div>
             <div>
-              <h2 className="text-sm sm:text-base font-semibold text-slate-900">
-                Official Passenger Notice Draft
+              <h2 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em' }}>
+                Your Claim Draft
               </h2>
-              <p className="text-xs text-slate-500">
-                Review, edit, and approve before submission
-              </p>
+              <p style={{ fontSize: 12, color: 'var(--text-2)' }}>Review, edit, and approve before submitting</p>
             </div>
           </div>
           <button
             id="close-draft-modal-btn"
             type="button"
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+            style={{
+              width: 32, height: 32, borderRadius: 9, flexShrink: 0,
+              background: 'rgba(148,163,184,0.14)', border: '1px solid rgba(148,163,184,0.22)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', color: 'var(--text-2)', transition: 'background 150ms',
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = 'rgba(148,163,184,0.28)'}
+            onMouseLeave={e => e.currentTarget.style.background = 'rgba(148,163,184,0.14)'}
           >
-            <X className="w-5 h-5" />
+            <X style={{ width: 15, height: 15 }} />
           </button>
         </div>
 
-        {/* Body content */}
-        <div className="p-4 sm:p-5 overflow-y-auto space-y-4 text-xs">
-          {/* Human-in-the-loop reminder */}
-          <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 flex items-start gap-2.5 text-slate-700">
-            <Sparkles className="w-4 h-4 text-slate-700 flex-shrink-0 mt-0.5" />
-            <div>
-              <strong className="text-slate-900">Human Passenger Verification:</strong> AI has structured this notice based on applicable aviation regulations and your case facts. Please verify your details and click <strong>Approve Draft</strong> below.
+        {/* Body */}
+        <div style={{ flex: 1, overflowY: 'auto', padding: '20px 22px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {/* Human-in-the-loop notice */}
+          <div style={{
+            padding: '12px 14px', borderRadius: 14,
+            background: 'rgba(201,221,234,0.22)',
+            border: '1px solid rgba(157,189,212,0.30)',
+            display: 'flex', alignItems: 'flex-start', gap: 10,
+          }}>
+            <Sparkles style={{ width: 15, height: 15, color: 'var(--sky)', flexShrink: 0, marginTop: 1 }} />
+            <div style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.6 }}>
+              <strong style={{ fontWeight: 700 }}>Human review required.</strong>{' '}
+              This letter was structured by AI based on your case facts and applicable aviation regulations.
+              Please verify all details are accurate before approving.
             </div>
           </div>
 
-          {/* Subject Field */}
+          {/* Subject */}
           <div>
-            <label htmlFor="draft-subject-input" className="block text-[11px] font-medium text-slate-600 uppercase tracking-wider mb-1">
+            <label htmlFor="draft-subject-input" className="ff-label-field">
               Email / Notice Subject
             </label>
             <input
@@ -96,65 +129,59 @@ export const ClaimDraftModal: React.FC<ClaimDraftModalProps> = ({
               type="text"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50/60 border border-slate-200 rounded-lg text-xs font-medium text-slate-900 focus:outline-none focus:border-slate-800 focus:bg-white focus:ring-1 focus:ring-slate-800 transition-colors"
+              className="ff-input"
+              style={{ fontWeight: 600 }}
             />
           </div>
 
-          {/* Letter Body Textarea */}
+          {/* Letter body */}
           <div>
-            <label htmlFor="draft-body-textarea" className="block text-[11px] font-medium text-slate-600 uppercase tracking-wider mb-1">
-              Letter Content (Editable)
-            </label>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+              <Edit3 style={{ width: 12, height: 12, color: 'var(--text-2)' }} />
+              <label htmlFor="draft-body-textarea" className="ff-label-field" style={{ margin: 0 }}>
+                Letter Content (Editable)
+              </label>
+            </div>
             <textarea
               id="draft-body-textarea"
-              rows={12}
+              rows={14}
               value={letterBody}
               onChange={(e) => setLetterBody(e.target.value)}
-              className="w-full p-3 bg-slate-50/60 border border-slate-200 rounded-lg font-mono text-xs text-slate-800 focus:outline-none focus:border-slate-800 focus:bg-white focus:ring-1 focus:ring-slate-800 transition-colors leading-relaxed resize-y"
+              className="ff-input"
+              style={{
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: 11.5, lineHeight: 1.7,
+                resize: 'vertical', height: 'auto',
+              }}
             />
           </div>
         </div>
 
-        {/* Footer Actions */}
-        <div className="p-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between gap-3 flex-wrap">
-          <div className="flex items-center gap-2">
-            <button
-              id="copy-draft-btn"
-              type="button"
-              onClick={handleCopy}
-              className="px-3 py-2 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
-            >
-              {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-              {copied ? 'Copied!' : 'Copy Letter'}
+        {/* Footer */}
+        <div style={{
+          padding: '14px 22px',
+          borderTop: '1px solid rgba(148,163,184,0.15)',
+          background: 'rgba(238,243,247,0.70)',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap',
+        }}>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button id="copy-draft-btn" type="button" onClick={handleCopy} className="ff-btn-secondary">
+              {copied ? <Check style={{ width: 13, height: 13, color: 'var(--success)' }} /> : <Copy style={{ width: 13, height: 13 }} />}
+              {copied ? 'Copied!' : 'Copy'}
             </button>
-            <button
-              id="download-draft-btn"
-              type="button"
-              onClick={handleDownload}
-              className="px-3 py-2 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
-            >
-              <Download className="w-3.5 h-3.5" />
-              Download .TXT
+            <button id="download-draft-btn" type="button" onClick={handleDownload} className="ff-btn-secondary">
+              <Download style={{ width: 13, height: 13 }} />
+              Download
             </button>
           </div>
 
-          <div className="flex items-center gap-2">
-            <button
-              id="cancel-draft-btn"
-              type="button"
-              onClick={onClose}
-              className="px-3 py-2 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-medium transition-colors cursor-pointer"
-            >
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button id="cancel-draft-btn" type="button" onClick={onClose} className="ff-btn-secondary">
               Cancel
             </button>
-            <button
-              id="approve-draft-btn"
-              type="button"
-              onClick={handleSaveAndApprove}
-              className="px-4 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer"
-            >
-              <Check className="w-4 h-4" />
-              {draft.isApprovedByPassenger ? 'Save & Re-Approve' : 'Approve Draft (Human Guard)'}
+            <button id="approve-draft-btn" type="button" onClick={handleSaveAndApprove} className="ff-btn-success">
+              <Check style={{ width: 15, height: 15 }} />
+              {draft.isApprovedByPassenger ? 'Re-Approve Draft' : 'Approve Draft'}
             </button>
           </div>
         </div>

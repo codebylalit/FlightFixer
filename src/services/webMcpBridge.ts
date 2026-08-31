@@ -100,28 +100,30 @@ class WebMCPBridgeManager {
    * and exposes the standard window.__WEBMCP__ interface for live agent execution.
    */
   private registerGlobalBrowserBridge() {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined' || this.isRegisteredInBrowser) return;
 
-    // Feature detect native navigator.modelContext (Chrome 146+ WebMCP standard) safely
+    // Feature detect native document.modelContext / navigator.modelContext safely
     try {
+      const doc = document as any;
       const nav = window.navigator as any;
-      if (nav && typeof nav === 'object' && 'modelContext' in nav) {
-        const mc = nav.modelContext;
-        if (mc && typeof mc.registerTool === 'function') {
-          WEBMCP_TOOLS_DEFINITIONS.forEach(def => {
+      const mc = (doc && 'modelContext' in doc ? doc.modelContext : (nav && 'modelContext' in nav ? nav.modelContext : null));
+      
+      if (mc && typeof mc.registerTool === 'function') {
+        WEBMCP_TOOLS_DEFINITIONS.forEach(def => {
+          try {
             mc.registerTool({
               name: def.name,
               description: def.description,
               inputSchema: def.parameters,
               execute: async (args: any) => this.executeTool(def.name, args)
             });
-          });
-          this.isRegisteredInBrowser = true;
-        }
+          } catch {
+            // Silently ignore duplicate tool registration during HMR reloads
+          }
+        });
+        this.isRegisteredInBrowser = true;
       }
     } catch (err) {
-      // Gracefully handled: If native navigator.modelContext is disallowed by iframe permissions policy,
-      // the application operates seamlessly via the in-window WebMCP dispatcher.
       this.isRegisteredInBrowser = false;
     }
 
@@ -169,7 +171,7 @@ class WebMCPBridgeManager {
       return {
         success: false,
         error: 'CONTEXT_NOT_MOUNTED',
-        message: 'FlightFixer application context is initializing.'
+        message: 'FlightClaims application context is initializing.'
       };
     }
 
@@ -359,6 +361,8 @@ class WebMCPBridgeManager {
         legalBasis = 'Directorate General of Civil Aviation (DGCA) Civil Aviation Requirements (CAR), Section 3, Series M, Part IV';
         if (currentAnalysis.financialRecovery.status === 'Potential Compensation' && currentAnalysis.financialRecovery.formattedRange) {
           reliefSought = `1. Statutory DGCA compensation of ${currentAnalysis.financialRecovery.formattedRange} as mandated under CAR Part IV.\n2. Reimbursement for any incurred out-of-pocket refreshments and necessary expenses.`;
+        } else if (flightCase.disruptionType === 'delayed' && (flightCase.delayHours + flightCase.delayMinutes / 60) < 6) {
+          reliefSought = `1. Reimbursement for out-of-pocket meal, beverage, and duty-of-care expenses incurred during the ${flightCase.delayHours}h ${flightCase.delayMinutes}m delay.\n2. Official written confirmation of statutory compliance under DGCA CAR Section 3, Series M, Part IV.`;
         } else {
           reliefSought = `1. Full ticket refund / reimbursement for unused sectors as mandated under DGCA CAR regulations.\n2. Provision of complimentary duty-of-care expenses incurred during the disruption.`;
         }
@@ -491,7 +495,7 @@ class WebMCPBridgeManager {
     return {
       success: false,
       error: 'UNKNOWN_TOOL',
-      message: `Tool "${toolName}" is not registered in FlightFixer WebMCP context.`
+      message: `Tool "${toolName}" is not registered in FlightClaims WebMCP context.`
     };
   }
 }
