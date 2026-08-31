@@ -949,25 +949,25 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
         </footer>
       </div>
 
-      {/* ── Letter modal (bottom sheet) ──────────────────────────── */}
+      {/* ── Letter modal (centered) ───────────────────────────── */}
       {isDraftOpen && claimDraft && (
         <div
-          style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', background: 'rgba(17,24,39,0.55)', backdropFilter: 'blur(10px)' }}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 50,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: '16px',
+            background: 'rgba(17,24,39,0.55)', backdropFilter: 'blur(10px)'
+          }}
           className="ff-fadeup"
           onClick={e => { if (e.target === e.currentTarget) onCloseDraft(); }}
         >
           <div style={{
-            width: '100%', maxWidth: 640, maxHeight: '94dvh',
+            width: '100%', maxWidth: 640, maxHeight: '88dvh',
             background: 'rgba(252,252,250,0.97)', backdropFilter: 'blur(24px)',
-            borderRadius: '26px 26px 0 0',
+            borderRadius: 24,
             border: '1px solid rgba(255,255,255,0.80)',
-            boxShadow: '0 -12px 48px rgba(0,0,0,0.16)',
-            display: 'flex', flexDirection: 'column', overflow: 'hidden',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.22)',
           }}>
-            {/* Handle bar */}
-            <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0 2px' }}>
-              <div style={{ width: 36, height: 4, borderRadius: 99, background: 'rgba(148,163,184,0.30)' }} />
-            </div>
 
             {/* Header */}
             <div style={{ padding: '10px 20px 14px', borderBottom: '1px solid rgba(148,163,184,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
