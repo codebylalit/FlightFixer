@@ -83,6 +83,35 @@ export const WEBMCP_TOOLS_DEFINITIONS: WebMCPToolDefinition[] = [
         override_confirmation: { type: 'boolean', description: 'Set to true only if passenger gave explicit confirmation' }
       }
     }
+  },
+  {
+    name: 'query_disruption_rights',
+    description: 'Query statutory aviation rights, meal entitlements, and compensation brackets for a given route and disruption.',
+    parameters: {
+      type: 'object',
+      properties: {
+        originIata: { type: 'string', description: '3-letter IATA code for departure airport (e.g. BOM, DEL, LHR)' },
+        destinationIata: { type: 'string', description: '3-letter IATA code for arrival airport (e.g. AMD, BLR, JFK)' },
+        delayHours: { type: 'number', description: 'Duration of delay in hours' },
+        disruptionType: { type: 'string', description: 'Category of flight disruption (delayed, cancelled, denied_boarding)' }
+      }
+    }
+  },
+  {
+    name: 'set_flight_case_details',
+    description: 'Update flight case parameters and update the application UI in real-time.',
+    parameters: {
+      type: 'object',
+      properties: {
+        airline: { type: 'string', description: 'Airline operating the flight' },
+        flightNumber: { type: 'string', description: 'Flight number (e.g. AI-101, 6E-5342)' },
+        originIata: { type: 'string', description: '3-letter IATA code for departure airport' },
+        destinationIata: { type: 'string', description: '3-letter IATA code for arrival airport' },
+        disruptionType: { type: 'string', description: 'Disruption type' },
+        delayHours: { type: 'number', description: 'Duration of delay in hours' },
+        passengerName: { type: 'string', description: 'Passenger full name' }
+      }
+    }
   }
 ];
 
@@ -186,13 +215,13 @@ class WebMCPBridgeManager {
       addActivityLog 
     } = this.ctx;
 
-    // 1. TOOL: analyze_flight_case
-    if (toolName === 'analyze_flight_case') {
+    // 1. TOOL: analyze_flight_case / query_disruption_rights / set_flight_case_details
+    if (toolName === 'analyze_flight_case' || toolName === 'query_disruption_rights' || toolName === 'set_flight_case_details') {
       addActivityLog({
         type: 'tool_call',
-        toolName: 'analyze_flight_case',
+        toolName: toolName,
         status: 'running',
-        description: `Executing WebMCP tool analyze_flight_case() with structured input`,
+        description: `Executing WebMCP tool ${toolName}() with structured input`,
         payload: rawArgs
       });
 
