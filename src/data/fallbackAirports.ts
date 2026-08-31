@@ -1,0 +1,425 @@
+import { Airport } from '../types';
+
+export const FALLBACK_AIRPORTS: Airport[] = [
+  // India Major Metros & Capitals
+  {
+    iata: 'BOM',
+    icao: 'VABB',
+    name: 'Chhatrapati Shivaji Maharaj International Airport',
+    city: 'Mumbai',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 19.0896,
+    lon: 72.8656,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'DEL',
+    icao: 'VIDP',
+    name: 'Indira Gandhi International Airport',
+    city: 'New Delhi',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 28.5562,
+    lon: 77.1000,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'BLR',
+    icao: 'VOBL',
+    name: 'Kempegowda International Airport',
+    city: 'Bengaluru',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 13.1986,
+    lon: 77.7066,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'MAA',
+    icao: 'VOMM',
+    name: 'Chennai International Airport',
+    city: 'Chennai',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 12.9941,
+    lon: 80.1709,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'HYD',
+    icao: 'VOHS',
+    name: 'Rajiv Gandhi International Airport',
+    city: 'Hyderabad',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 17.2403,
+    lon: 78.4294,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'CCU',
+    icao: 'VECC',
+    name: 'Netaji Subhash Chandra Bose International Airport',
+    city: 'Kolkata',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 22.6547,
+    lon: 88.4467,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'AMD',
+    icao: 'VAAH',
+    name: 'Sardar Vallabhbhai Patel International Airport',
+    city: 'Ahmedabad',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 23.0772,
+    lon: 72.6347,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'PNQ',
+    icao: 'VAPO',
+    name: 'Pune Airport',
+    city: 'Pune',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 18.5821,
+    lon: 73.9197,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'GOI',
+    icao: 'VAGO',
+    name: 'Dabolim Airport',
+    city: 'Goa',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 15.3808,
+    lon: 73.8314,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'GOX',
+    icao: 'VOGA',
+    name: 'Manohar International Airport (Mopa)',
+    city: 'Goa',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 15.7667,
+    lon: 73.8667,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'COK',
+    icao: 'VOCI',
+    name: 'Cochin International Airport',
+    city: 'Kochi',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 10.1556,
+    lon: 76.4019,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'JAI',
+    icao: 'VIJP',
+    name: 'Jaipur International Airport',
+    city: 'Jaipur',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 26.8242,
+    lon: 75.8122,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'LKO',
+    icao: 'VILK',
+    name: 'Chaudhary Charan Singh International Airport',
+    city: 'Lucknow',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 26.7606,
+    lon: 80.8893,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'GAU',
+    icao: 'VEGT',
+    name: 'Lokpriya Gopinath Bordoloi International Airport',
+    city: 'Guwahati',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 26.1061,
+    lon: 91.5859,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'PAT',
+    icao: 'VEPT',
+    name: 'Jay Prakash Narayan Airport',
+    city: 'Patna',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 25.5913,
+    lon: 85.0880,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'IXC',
+    icao: 'VICG',
+    name: 'Shaheed Bhagat Singh International Airport',
+    city: 'Chandigarh',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 30.6735,
+    lon: 76.7885,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'TRV',
+    icao: 'VOTV',
+    name: 'Thiruvananthapuram International Airport',
+    city: 'Thiruvananthapuram',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 8.4821,
+    lon: 76.9200,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'BDQ',
+    icao: 'VABO',
+    name: 'Vadodara Airport',
+    city: 'Vadodara',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 22.3362,
+    lon: 73.2263,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'NAG',
+    icao: 'VANP',
+    name: 'Dr. Babasaheb Ambedkar International Airport',
+    city: 'Nagpur',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 21.0922,
+    lon: 79.0472,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'IXR',
+    icao: 'VERC',
+    name: 'Birsa Munda Airport',
+    city: 'Ranchi',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 23.3143,
+    lon: 85.3217,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'BBI',
+    icao: 'VEBS',
+    name: 'Biju Patnaik International Airport',
+    city: 'Bhubaneswar',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 20.2444,
+    lon: 85.8178,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'SXR',
+    icao: 'VISR',
+    name: 'Sheikh ul-Alam International Airport',
+    city: 'Srinagar',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 33.9871,
+    lon: 74.7741,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'IXB',
+    icao: 'VEBD',
+    name: 'Bagdogra International Airport',
+    city: 'Siliguri',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 26.6812,
+    lon: 88.3286,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'VTZ',
+    icao: 'VOVZ',
+    name: 'Visakhapatnam International Airport',
+    city: 'Visakhapatnam',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 17.7212,
+    lon: 83.2245,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'IDR',
+    icao: 'VAID',
+    name: 'Devi Ahilya Bai Holkar Airport',
+    city: 'Indore',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 22.7217,
+    lon: 75.8011,
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    iata: 'VNS',
+    icao: 'VEBN',
+    name: 'Lal Bahadur Shastri International Airport',
+    city: 'Varanasi',
+    country: 'India',
+    countryCode: 'IN',
+    lat: 25.4524,
+    lon: 82.8593,
+    timezone: 'Asia/Kolkata'
+  },
+
+  // Major International Hubs
+  {
+    iata: 'LHR',
+    icao: 'EGLL',
+    name: 'Heathrow Airport',
+    city: 'London',
+    country: 'United Kingdom',
+    countryCode: 'GB',
+    lat: 51.4700,
+    lon: -0.4543,
+    timezone: 'Europe/London'
+  },
+  {
+    iata: 'LGW',
+    icao: 'EGKK',
+    name: 'Gatwick Airport',
+    city: 'London',
+    country: 'United Kingdom',
+    countryCode: 'GB',
+    lat: 51.1537,
+    lon: -0.1821,
+    timezone: 'Europe/London'
+  },
+  {
+    iata: 'CDG',
+    icao: 'LFPG',
+    name: 'Charles de Gaulle Airport',
+    city: 'Paris',
+    country: 'France',
+    countryCode: 'FR',
+    lat: 49.0097,
+    lon: 2.5479,
+    timezone: 'Europe/Paris'
+  },
+  {
+    iata: 'FRA',
+    icao: 'EDDF',
+    name: 'Frankfurt Airport',
+    city: 'Frankfurt',
+    country: 'Germany',
+    countryCode: 'DE',
+    lat: 50.0379,
+    lon: 8.5622,
+    timezone: 'Europe/Berlin'
+  },
+  {
+    iata: 'AMS',
+    icao: 'EHAM',
+    name: 'Amsterdam Airport Schiphol',
+    city: 'Amsterdam',
+    country: 'Netherlands',
+    countryCode: 'NL',
+    lat: 52.3105,
+    lon: 4.7683,
+    timezone: 'Europe/Amsterdam'
+  },
+  {
+    iata: 'DXB',
+    icao: 'OMDB',
+    name: 'Dubai International Airport',
+    city: 'Dubai',
+    country: 'United Arab Emirates',
+    countryCode: 'AE',
+    lat: 25.2532,
+    lon: 55.3657,
+    timezone: 'Asia/Dubai'
+  },
+  {
+    iata: 'DOH',
+    icao: 'OTHH',
+    name: 'Hamad International Airport',
+    city: 'Doha',
+    country: 'Qatar',
+    countryCode: 'QA',
+    lat: 25.2731,
+    lon: 51.6081,
+    timezone: 'Asia/Qatar'
+  },
+  {
+    iata: 'SIN',
+    icao: 'WSSS',
+    name: 'Singapore Changi Airport',
+    city: 'Singapore',
+    country: 'Singapore',
+    countryCode: 'SG',
+    lat: 1.3644,
+    lon: 103.9915,
+    timezone: 'Asia/Singapore'
+  },
+  {
+    iata: 'JFK',
+    icao: 'KJFK',
+    name: 'John F. Kennedy International Airport',
+    city: 'New York',
+    country: 'United States',
+    countryCode: 'US',
+    lat: 40.6413,
+    lon: -73.7781,
+    timezone: 'America/New_York'
+  },
+  {
+    iata: 'SFO',
+    icao: 'KSFO',
+    name: 'San Francisco International Airport',
+    city: 'San Francisco',
+    country: 'United States',
+    countryCode: 'US',
+    lat: 37.6213,
+    lon: -122.3790,
+    timezone: 'America/Los_Angeles'
+  },
+  {
+    iata: 'NRT',
+    icao: 'RJAA',
+    name: 'Narita International Airport',
+    city: 'Tokyo',
+    country: 'Japan',
+    countryCode: 'JP',
+    lat: 35.7720,
+    lon: 140.3929,
+    timezone: 'Asia/Tokyo'
+  },
+  {
+    iata: 'SYD',
+    icao: 'YSSY',
+    name: 'Sydney Kingsford Smith Airport',
+    city: 'Sydney',
+    country: 'Australia',
+    countryCode: 'AU',
+    lat: -33.9399,
+    lon: 151.1753,
+    timezone: 'Australia/Sydney'
+  }
+];

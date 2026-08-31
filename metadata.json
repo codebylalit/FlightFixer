@@ -1,0 +1,7 @@
+{
+  "name": "FlightFixer",
+  "description": "AI-powered flight disruption assistance application with automated route jurisdiction calculation, DGCA/EU261 rights analysis, real WebMCP agent integration, and human-in-the-loop claim drafting.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
