@@ -5,6 +5,17 @@ import {
   Mail, User, Hash, Calendar, Loader2, Shield, FileText,
   Search, FileUp, Upload, Camera
 } from 'lucide-react';
+
+// ─── Hook: responsive grid switching ─────────────────────────
+function useIsMobile(breakpoint = 480) {
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= breakpoint);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= breakpoint);
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, [breakpoint]);
+  return isMobile;
+}
 import { FlightCase, AnalysisResult, ClaimDraft, DisruptionType } from '../types';
 import { AirportSearch } from './AirportSearch';
 import { InfoModal } from './InfoModal';
@@ -137,6 +148,7 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
   onUpdate, onGenerate, onApprove, onOpenDraft, onCloseDraft,
 }) => {
   const [step, setStep] = useState(1);
+  const isMobile = useIsMobile(480);
   const [heroSearch, setHeroSearch] = useState('');
   const [draftSubject, setDraftSubject] = useState('');
   const [draftBody, setDraftBody] = useState('');
@@ -285,6 +297,7 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
         minHeight: '100dvh',
         display: 'flex',
         flexDirection: 'column',
+        overflowX: 'hidden',
       }}>
 
         {/* ── Floating Header Nav ──────────────────────────────── */}
@@ -312,8 +325,9 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: '0 10px 0 22px',
+            padding: '0 8px 0 16px',
             transition: 'all 200ms ease',
+            minWidth: 0,
           }}>
             {/* Left: Brand */}
             {step > 1 ? (
@@ -340,7 +354,7 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                 <ChevronLeft style={{ width: 15, height: 15 }} /> Back
               </button>
             ) : (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 9, minWidth: 0 }}>
                 <div style={{
                   width: 28,
                   height: 28,
@@ -354,7 +368,7 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                 }}>
                   <Plane style={{ width: 13, height: 13, color: '#F9F8F6', transform: 'rotate(-45deg)' }} />
                 </div>
-                <span className="ff-display" style={{ fontSize: 18, color: 'var(--text)', fontStyle: 'italic', fontWeight: 400, letterSpacing: '-0.02em', lineHeight: 1 }}>
+                <span className="ff-display ff-nav-brand-text" style={{ fontSize: 18, color: 'var(--text)', fontStyle: 'italic', fontWeight: 400, letterSpacing: '-0.02em', lineHeight: 1 }}>
                   Flight<span style={{ fontStyle: 'normal', fontWeight: 600 }}>Claims</span>
                 </span>
               </div>
@@ -399,12 +413,12 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
             )}
 
             {/* Right: Pill Button */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
               <button
                 type="button"
                 onClick={() => setScanModalOpen(true)}
                 style={{
-                  padding: '8px 18px',
+                  padding: '8px 14px',
                   borderRadius: 9999,
                   background: 'var(--navy)',
                   color: '#FFFFFF',
@@ -417,20 +431,23 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                   letterSpacing: '-0.01em',
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: 7,
+                  gap: 6,
+                  minHeight: 36,
+                  minWidth: 36,
+                  justifyContent: 'center',
                 }}
                 onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.03)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(26,35,50,0.32)'; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(26,35,50,0.25)'; }}
               >
                 <Camera style={{ width: 14, height: 14 }} />
-                Scan ticket
+                <span className="ff-nav-cta-text">Scan ticket</span>
               </button>
             </div>
           </nav>
         </header>
 
         {/* ── Content ──────────────────────────────────────────── */}
-        <main style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '64px 24px 80px' }}>
+        <main style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 'clamp(36px, 7vw, 64px) clamp(14px, 4vw, 24px) clamp(56px, 8vw, 80px)' }}>
           <div style={{ width: '100%', maxWidth: 720 }}>
 
             {/* ═══════════ STEP 1 — Hero + Disruption ══════════ */}
@@ -453,7 +470,7 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                     DGCA · EU261 · UK261 — Instant calculation
                   </div>
 
-                  <h1 className="ff-display" style={{ fontSize: 'clamp(34px, 5.8vw, 56px)', color: 'var(--text)', marginBottom: 16, lineHeight: 1.08 }}>
+                  <h1 className="ff-display ff-hero-heading" style={{ fontSize: 'clamp(34px, 5.8vw, 56px)', color: 'var(--text)', marginBottom: 16, lineHeight: 1.08 }}>
                     <span style={{ display: 'block' }}>Flight delayed or cancelled?</span>
                     <em style={{ color: '#4A7FA0', fontStyle: 'italic', display: 'block' }}>Claim what airlines owe you.</em>
                   </h1>
@@ -528,7 +545,7 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                   <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-2)', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 12, textAlign: 'left' }}>
                     What happened to your flight?
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                  <div className="ff-disruption-grid" style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 12 }}>
                     {DISRUPTIONS.map(({ type, label, sub, icon: Icon, accent }) => (
                       <button
                         key={type}
@@ -634,7 +651,7 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                     </button>
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: 10 }}>
+                  <div className="ff-step2-airline-grid" style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '3fr 2fr', gap: 10 }}>
                     <Field label="Airline">
                       <Inp id="airline-input" list="airlines-list" placeholder="e.g. IndiGo"
                         value={flightCase.airline} onChange={e => onUpdate({ airline: e.target.value })}
@@ -790,7 +807,7 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
 
                 {/* Details card */}
                 <div className="ff-float-card" style={{ padding: '20px 20px 22px', display: 'flex', flexDirection: 'column', gap: 13 }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  <div className="ff-step3-details-grid" style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 10 }}>
                     <Field label="Your Name">
                       <Inp id="passenger-name" placeholder="Rahul Sharma" value={flightCase.passengerName}
                         onChange={e => onUpdate({ passengerName: e.target.value })}
@@ -828,7 +845,7 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                       <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--text-3)', marginBottom: 3 }}>
                         Estimated compensation
                       </div>
-                      <div style={{ fontSize: 44, fontWeight: 900, color: 'var(--text)', letterSpacing: '-0.05em', lineHeight: 1, fontFamily: 'Inter, sans-serif' }}>
+                      <div className="ff-compensation-amount" style={{ fontSize: 44, fontWeight: 900, color: 'var(--text)', letterSpacing: '-0.05em', lineHeight: 1, fontFamily: 'Inter, sans-serif' }}>
                         {analysis.financialRecovery.formattedRange}
                       </div>
                       <div style={{ fontSize: 11.5, color: 'var(--text-2)', marginTop: 5 }}>
@@ -982,6 +999,7 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                 </div>
               </div>
               <button type="button" onClick={onCloseDraft}
+                className="ff-modal-close"
                 style={{ width: 32, height: 32, borderRadius: 9, border: 'none', background: 'rgba(148,163,184,0.14)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-2)' }}>
                 <X style={{ width: 15, height: 15 }} />
               </button>

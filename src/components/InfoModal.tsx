@@ -78,6 +78,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose, defaultTa
           <button
             type="button"
             onClick={onClose}
+            className="ff-modal-close"
             style={{
               width: 30, height: 30,
               borderRadius: 8,
@@ -93,14 +94,17 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose, defaultTa
         </div>
 
         {/* Tab Navigation */}
-        <div style={{
-          display: 'flex',
-          gap: 6,
-          padding: '10px 20px',
-          background: 'rgba(238, 243, 240, 0.60)',
-          borderBottom: '1px solid rgba(148, 163, 184, 0.12)',
-          flexShrink: 0,
-        }}>
+        <div
+          className="ff-modal-tabs"
+          style={{
+            display: 'flex',
+            gap: 6,
+            padding: '10px 16px',
+            background: 'rgba(238, 243, 240, 0.60)',
+            borderBottom: '1px solid rgba(148, 163, 184, 0.12)',
+            flexShrink: 0,
+            flexWrap: 'wrap',
+          }}>
           {[
             { id: 'about', label: 'About FlightClaims' },
             { id: 'rights', label: 'Passenger Rights' },
@@ -128,7 +132,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose, defaultTa
         </div>
 
         {/* Modal Scroll Content */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: '20px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div style={{ flex: 1, overflowY: 'auto', padding: 'clamp(14px, 4vw, 20px)', display: 'flex', flexDirection: 'column', gap: 16 }}>
 
           {/* TAB 1: ABOUT */}
           {activeTab === 'about' && (
@@ -264,7 +268,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose, defaultTa
             type="button"
             onClick={onClose}
             className="ff-btn-primary"
-            style={{ fontSize: 12, padding: '7px 16px' }}
+            style={{ fontSize: 12, padding: '9px 18px', minHeight: 38 }}
           >
             Close Guide
           </button>
