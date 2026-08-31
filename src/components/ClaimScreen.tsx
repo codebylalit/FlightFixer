@@ -473,9 +473,9 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                   }}
                 >
                   {([
-                    { tab: 'about'        as const, label: 'About FlightClaims' },
-                    { tab: 'rights'       as const, label: 'Passenger Rights'   },
-                    { tab: 'how-it-works' as const, label: 'How It Works'       },
+                    { tab: 'about' as const, label: 'About FlightClaims' },
+                    { tab: 'rights' as const, label: 'Passenger Rights' },
+                    { tab: 'how-it-works' as const, label: 'How It Works' },
                   ]).map(item => (
                     <button
                       key={item.tab}
@@ -591,7 +591,7 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                     onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.02)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(26,35,50,0.35)'; }}
                     onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(26,35,50,0.25)'; }}
                   >
-                    Check compensation <ArrowRight style={{ width: 14, height: 14 }} />
+                    Claim Check<ArrowRight style={{ width: 14, height: 14 }} />
                   </button>
                 </form>
 
