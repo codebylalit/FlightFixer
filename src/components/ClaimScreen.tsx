@@ -76,6 +76,16 @@ const Steps: React.FC<{ current: number; total?: number }> = ({ current, total =
   </div>
 );
 
+// Input primitives (defined at top-level to preserve React DOM focus on re-renders)
+const Inp: React.FC<React.InputHTMLAttributes<HTMLInputElement> & { prefix?: React.ReactNode }> = ({ prefix, style: s, ...p }) => (
+  <div style={{ position: 'relative' }}>
+    {prefix && <span style={{ position: 'absolute', left: 11, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-3)', pointerEvents: 'none', display: 'flex' }}>{prefix}</span>}
+    <input {...p} className="ff-input" style={{ paddingLeft: prefix ? 30 : 13, ...s }} />
+  </div>
+);
+
+const Sel: React.FC<React.SelectHTMLAttributes<HTMLSelectElement>> = (p) => <select {...p} className="ff-select" />;
+
 const compressImageIfNeeded = (file: File): Promise<{ base64: string; mimeType: string }> => {
   return new Promise((resolve, reject) => {
     if (file.type === 'application/pdf') {
@@ -227,15 +237,7 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
     onCloseDraft();
   };
 
-  // Input primitive
-  const Inp = ({ prefix, style: s, ...p }: React.InputHTMLAttributes<HTMLInputElement> & { prefix?: React.ReactNode }) => (
-    <div style={{ position: 'relative' }}>
-      {prefix && <span style={{ position: 'absolute', left: 11, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-3)', pointerEvents: 'none', display: 'flex' }}>{prefix}</span>}
-      <input {...p} className="ff-input" style={{ paddingLeft: prefix ? 30 : 13, ...s }} />
-    </div>
-  );
 
-  const Sel = (p: React.SelectHTMLAttributes<HTMLSelectElement>) => <select {...p} className="ff-select" />;
 
   const selectedDisruption = DISRUPTIONS.find(d => d.type === flightCase.disruptionType)!;
 
@@ -377,47 +379,31 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
 
             {/* Right: Pill Button */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              {step === 1 ? (
-                <button
-                  type="button"
-                  onClick={() => setScanModalOpen(true)}
-                  style={{
-                    padding: '7px 15px',
-                    borderRadius: 9999,
-                    background: 'var(--navy)',
-                    color: '#FFFFFF',
-                    fontSize: 12.5,
-                    fontWeight: 600,
-                    border: 'none',
-                    cursor: 'pointer',
-                    boxShadow: '0 2px 8px rgba(26, 35, 50, 0.25)',
-                    transition: 'all 160ms ease',
-                    letterSpacing: '-0.01em',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 6,
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.03)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(26,35,50,0.32)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(26,35,50,0.25)'; }}
-                >
-                  <Camera style={{ width: 13, height: 13 }} />
-                  Scan ticket
-                </button>
-              ) : (
-                <div
-                  style={{
-                    padding: '4px 10px',
-                    borderRadius: 9999,
-                    background: 'rgba(212, 150, 58, 0.12)',
-                    border: '1px solid rgba(212, 150, 58, 0.25)',
-                    color: '#8B6020',
-                    fontSize: 11,
-                    fontWeight: 600,
-                  }}
-                >
-                  Demo
-                </div>
-              )}
+              <button
+                type="button"
+                onClick={() => setScanModalOpen(true)}
+                style={{
+                  padding: '7px 15px',
+                  borderRadius: 9999,
+                  background: 'var(--navy)',
+                  color: '#FFFFFF',
+                  fontSize: 12.5,
+                  fontWeight: 600,
+                  border: 'none',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 8px rgba(26, 35, 50, 0.25)',
+                  transition: 'all 160ms ease',
+                  letterSpacing: '-0.01em',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.03)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(26,35,50,0.32)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(26,35,50,0.25)'; }}
+              >
+                <Camera style={{ width: 13, height: 13 }} />
+                Scan ticket
+              </button>
             </div>
           </nav>
         </header>

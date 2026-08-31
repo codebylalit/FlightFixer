@@ -172,12 +172,13 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose, defaultTa
                 border: '1px solid rgba(148, 163, 184, 0.16)',
               }}>
                 <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <Scale style={{ width: 14, height: 14, color: 'var(--sky)' }} /> DGCA CAR (India Domestic)
+                  <Scale style={{ width: 14, height: 14, color: 'var(--sky)' }} /> DGCA CAR (India Domestic &amp; Departing)
                 </div>
-                <div style={{ fontSize: 12, color: 'var(--text-2)', lineHeight: 1.6, display: 'flex', flexDirection: 'column', gap: 4 }}>
-                  <div>• <strong>Delays (2–4h+):</strong> Free meals, refreshments, and duty of care at airport.</div>
-                  <div>• <strong>Cancellations (&lt;24h):</strong> Up to ₹5,000–₹10,000 statutory compensation or alternate flight + full refund.</div>
-                  <div>• <strong>Denied Boarding (Overbooking):</strong> Up to 400% of basic fare (max ₹20,000) or full refund.</div>
+                <div style={{ fontSize: 12, color: 'var(--text-2)', lineHeight: 1.6, display: 'flex', flexDirection: 'column', gap: 5 }}>
+                  <div>• <strong>Delays (2h–4h+):</strong> Free meals, beverages, and duty of care at the airport based on flight block time.</div>
+                  <div>• <strong>Delays (6h+ or Overnight):</strong> Free hotel stay + airport transfers, or choice of 100% full refund / alternate flight departing within 6 hours.</div>
+                  <div>• <strong>Cancellations (&lt;24h notice):</strong> Up to ₹5,000–₹10,000 statutory compensation (capped at Basic Fare + Fuel Charge) unless alternate flight within 2 hours is provided.</div>
+                  <div>• <strong>Denied Boarding (Overbooking):</strong> 200% Basic + Fuel (max ₹10,000) for alternate &le; 24h; 400% Basic + Fuel (max ₹20,000) + full ticket refund for alternate &gt; 24h or declined.</div>
                 </div>
               </div>
 
@@ -189,12 +190,28 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose, defaultTa
                 border: '1px solid rgba(148, 163, 184, 0.16)',
               }}>
                 <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <BookOpen style={{ width: 14, height: 14, color: 'var(--success)' }} /> EU261 &amp; UK261 (European Flights)
+                  <BookOpen style={{ width: 14, height: 14, color: 'var(--success)' }} /> EU261 &amp; UK261 (Europe &amp; UK Routes)
+                </div>
+                <div style={{ fontSize: 12, color: 'var(--text-2)', lineHeight: 1.6, display: 'flex', flexDirection: 'column', gap: 5 }}>
+                  <div>• <strong>Short Routes (&le; 1,500 km):</strong> €250 / £220 fixed statutory cash payout.</div>
+                  <div>• <strong>Medium Routes (1,500–3,500 km):</strong> €400 / £350 fixed statutory cash payout.</div>
+                  <div>• <strong>Long-Haul Routes (&gt; 3,500 km):</strong> €600 / £520 fixed statutory cash payout for 3+ hour arrival delays or cancellations notified &lt; 14 days in advance.</div>
+                  <div>• <strong>Duty of Care:</strong> Free food, refreshments, 2 phone calls/emails, and hotel accommodation for overnight delays.</div>
+                </div>
+              </div>
+
+              {/* Montreal Convention */}
+              <div style={{
+                padding: '14px 16px',
+                borderRadius: 14,
+                background: 'rgba(255, 255, 255, 0.75)',
+                border: '1px solid rgba(148, 163, 184, 0.16)',
+              }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <Shield style={{ width: 14, height: 14, color: 'var(--amber)' }} /> Montreal Convention 1999 (Article 19)
                 </div>
                 <div style={{ fontSize: 12, color: 'var(--text-2)', lineHeight: 1.6, display: 'flex', flexDirection: 'column', gap: 4 }}>
-                  <div>• <strong>Short Flights (&lt; 1,500 km):</strong> €250 / £220 fixed compensation.</div>
-                  <div>• <strong>Medium Flights (1,500–3,500 km):</strong> €400 / £350 fixed compensation.</div>
-                  <div>• <strong>Long Haul (&gt; 3,500 km):</strong> €600 / £520 fixed compensation.</div>
+                  <div>• Covers provable out-of-pocket financial damage up to <strong>5,346 SDR (~$7,100 USD / €6,500)</strong> for international flight delays and baggage losses.</div>
                 </div>
               </div>
             </div>

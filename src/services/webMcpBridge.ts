@@ -368,7 +368,11 @@ class WebMCPBridgeManager {
         }
       } else if (currentAnalysis.jurisdiction === 'eu261' || currentAnalysis.jurisdiction === 'uk261') {
         legalBasis = currentAnalysis.jurisdiction === 'uk261' ? 'UK Regulation (EC) No 261/2004 (Air Passenger Rights)' : 'European Parliament and Council Regulation (EC) No 261/2004';
-        reliefSought = `1. Statutory fixed compensation of ${currentAnalysis.financialRecovery.formattedRange || '€250 - €600'} based on route distance of ${currentAnalysis.formattedDistance}.\n2. Full reimbursement of incurred duty-of-care expenses (meals, accommodation, transport).`;
+        if (currentAnalysis.financialRecovery.status === 'Potential Compensation' && currentAnalysis.financialRecovery.formattedRange) {
+          reliefSought = `1. Statutory fixed compensation of ${currentAnalysis.financialRecovery.formattedRange} based on route distance of ${currentAnalysis.formattedDistance}.\n2. Full reimbursement of incurred duty-of-care expenses (meals, accommodation, transport).`;
+        } else {
+          reliefSought = `1. Full 100% ticket refund OR complimentary alternate flight rebooking to final destination under Article 8.\n2. Full reimbursement of incurred duty-of-care expenses (meals, accommodation, transport).`;
+        }
       } else {
         legalBasis = 'Montreal Convention 1999 (Article 19) and Airline Contract of Carriage';
         reliefSought = `1. Full refund of ticket cost for the disrupted segment.\n2. Direct reimbursement for provable damages, accommodation, and meal expenses incurred.`;

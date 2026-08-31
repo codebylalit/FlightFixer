@@ -396,10 +396,42 @@ export function analyzeFlightDisruption(flightCase: FlightCase): AnalysisResult 
         whyThisResult = 'Arrival delay is under the 3-hour statutory threshold.';
         hasEnoughDataForEstimate = true;
       }
-    } else if (disruptionType === 'cancelled' || disruptionType === 'denied_boarding') {
+    } else if (disruptionType === 'cancelled') {
+      if (informedWindow === 'more_than_2w') {
+        caseStatus = 'Further Review Recommended';
+        caseStatusColor = 'slate';
+        passengerGuidance.push(`Informed > 14 days prior: Under Regulation ${isUK ? 'UK261' : 'EC 261/2004'} Article 5(1)(c)(i), airlines giving at least 14 days advance cancellation notice are exempt from monetary compensation.`);
+        passengerGuidance.push('You remain entitled to a 100% full ticket refund OR free alternate flight rebooking to your destination.');
+
+        financialRecovery = {
+          status: 'Refund & Care Eligible',
+          currency: currency,
+          details: `Full refund or alternate flight rebooking. No statutory cash compensation applies when notified >14 days in advance under ${isUK ? 'UK261' : 'EU261'}.`
+        };
+        whyThisResult = `Notified >14 days in advance; Article 5 of Regulation ${isUK ? 'UK261' : 'EC 261/2004'} exempts statutory cash compensation.`;
+        hasEnoughDataForEstimate = true;
+      } else {
+        caseStatus = 'Compensation Likely Eligible';
+        caseStatusColor = 'emerald';
+        passengerGuidance.push(`Statutory fixed compensation of ${formatCurrency(tierAmt, currency)} per passenger is mandated unless extraordinary circumstances apply.`);
+        passengerGuidance.push('Full ticket refund or immediate rerouting to final destination at earliest convenience.');
+        passengerGuidance.push('Complimentary hotel accommodation and transport if rerouted flight departs the next day.');
+
+        financialRecovery = {
+          status: 'Potential Compensation',
+          amountMin: tierAmt,
+          amountMax: tierAmt,
+          currency: currency,
+          formattedRange: formatCurrency(tierAmt, currency),
+          details: `Statutory compensation of ${formatCurrency(tierAmt, currency)} based on route distance of ${km.toLocaleString()} km.`
+        };
+        whyThisResult = `Regulation ${isUK ? 'UK261' : 'EC 261/2004'} fixed statutory compensation for cancellation without 14+ days advance notice.`;
+        hasEnoughDataForEstimate = true;
+      }
+    } else if (disruptionType === 'denied_boarding') {
       caseStatus = 'Compensation Likely Eligible';
       caseStatusColor = 'emerald';
-      passengerGuidance.push(`Statutory compensation between ${formatCurrency(tierAmt, currency)} per passenger is mandated unless notified >14 days in advance.`);
+      passengerGuidance.push(`Statutory compensation of ${formatCurrency(tierAmt, currency)} per passenger is mandated for involuntary denied boarding.`);
       passengerGuidance.push('Full ticket refund or immediate rerouting to final destination at earliest convenience.');
       passengerGuidance.push('Complimentary hotel accommodation and transport if rerouted flight departs the next day.');
 
@@ -411,7 +443,7 @@ export function analyzeFlightDisruption(flightCase: FlightCase): AnalysisResult 
         formattedRange: formatCurrency(tierAmt, currency),
         details: `Statutory compensation of ${formatCurrency(tierAmt, currency)} based on route distance of ${km.toLocaleString()} km.`
       };
-      whyThisResult = `Regulation ${isUK ? 'UK261' : 'EC 261/2004'} fixed statutory compensation for cancellation/denied boarding without sufficient advance notice.`;
+      whyThisResult = `Regulation ${isUK ? 'UK261' : 'EC 261/2004'} fixed statutory compensation for involuntary denied boarding.`;
       hasEnoughDataForEstimate = true;
     } else {
       caseStatus = 'Action Recommended';
