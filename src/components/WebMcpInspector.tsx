@@ -113,14 +113,14 @@ export const WebMcpInspector: React.FC<WebMcpInspectorProps> = ({
             <label className="block text-[11px] font-medium text-slate-600 uppercase tracking-wider mb-2">
               Registered WebMCP Tools
             </label>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
               {WEBMCP_TOOLS_DEFINITIONS.map(def => (
                 <button
                   key={def.name}
                   id={`select-tool-${def.name}`}
                   type="button"
                   onClick={() => handleToolChange(def.name)}
-                  className={`p-2.5 rounded-lg border text-left transition-colors font-mono text-xs truncate cursor-pointer ${
+                  className={`p-2.5 min-h-[38px] rounded-lg border text-left transition-colors font-mono text-xs truncate cursor-pointer ${
                     selectedTool === def.name
                       ? 'bg-slate-900 border-slate-900 text-white font-medium'
                       : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
@@ -147,7 +147,7 @@ export const WebMcpInspector: React.FC<WebMcpInspectorProps> = ({
 
           {/* JSON Argument Playground */}
           <div>
-            <div className="flex items-center justify-between mb-1.5">
+            <div className="flex items-center justify-between gap-2 mb-1.5 flex-wrap">
               <label className="block text-[11px] font-medium text-slate-600 uppercase tracking-wider">
                 Tool Input Parameters (JSON Schema)
               </label>
@@ -156,10 +156,10 @@ export const WebMcpInspector: React.FC<WebMcpInspectorProps> = ({
                 type="button"
                 onClick={handleExecute}
                 disabled={isExecuting}
-                className="px-3 py-1 rounded bg-slate-900 hover:bg-slate-800 text-white font-medium text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+                className="px-3 py-1.5 min-h-[38px] rounded bg-slate-900 hover:bg-slate-800 text-white font-medium text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
               >
-                <Play className="w-3 h-3 fill-current" />
-                {isExecuting ? 'Invoking...' : 'Execute Tool on App'}
+                <Play className="w-3 h-3 fill-current shrink-0" />
+                <span>{isExecuting ? 'Invoking...' : 'Execute Tool on App'}</span>
               </button>
             </div>
             <textarea
@@ -182,7 +182,7 @@ export const WebMcpInspector: React.FC<WebMcpInspectorProps> = ({
               <span className="block text-[11px] font-medium text-slate-600 uppercase tracking-wider">
                 Live Execution Result (Returned to Model / Caller)
               </span>
-              <div className="p-3.5 rounded-lg bg-slate-900 font-mono text-xs text-emerald-400 max-h-56 overflow-y-auto">
+              <div className="p-3.5 rounded-lg bg-slate-900 font-mono text-xs text-emerald-400 max-h-56 overflow-x-auto overflow-y-auto no-scrollbar">
                 <pre className="text-emerald-300 leading-tight">
                   {JSON.stringify(executionResult, null, 2)}
                 </pre>
@@ -192,14 +192,14 @@ export const WebMcpInspector: React.FC<WebMcpInspectorProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between text-slate-500 text-xs">
+        <div className="p-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between text-slate-500 text-xs flex-wrap gap-2">
           <span>
             Exposed at <code className="text-slate-800 font-mono font-medium">window.__WEBMCP__.invokeTool()</code>
           </span>
           <button
             type="button"
             onClick={onClose}
-            className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-medium transition-colors cursor-pointer"
+            className="px-3 py-2 min-h-[38px] rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-medium transition-colors cursor-pointer"
           >
             Close Inspector
           </button>

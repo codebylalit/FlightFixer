@@ -212,30 +212,30 @@ export const AnalysisResults: React.FC<AnalysisResultsProps> = ({
               <strong style={{ display: 'block', marginBottom: 2 }}>Subject: {claimDraft.subject}</strong>
               {claimDraft.letterBody}
             </div>
-            <div style={{ display: 'flex', gap: 8 }}>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
               <button id="review-edit-draft-btn" type="button" onClick={onOpenDraftModal}
-                className="ff-btn-primary" style={{ flex: 1, fontSize: 12, padding: '9px 14px' }}>
-                <FileText style={{ width: 14, height: 14 }} />
-                {claimDraft.isApprovedByPassenger ? 'View Approved' : 'Review & Approve'}
+                className="ff-btn-primary w-full sm:w-auto sm:flex-1" style={{ fontSize: 12, padding: '9px 14px', minHeight: 42 }}>
+                <FileText style={{ width: 14, height: 14, flexShrink: 0 }} />
+                <span>{claimDraft.isApprovedByPassenger ? 'View Approved' : 'Review & Approve'}</span>
               </button>
               <button id="fill-demo-form-btn" type="button" onClick={onFillDemoForm}
                 disabled={!claimDraft.isApprovedByPassenger}
-                className={claimDraft.isApprovedByPassenger ? 'ff-btn-success' : ''}
-                style={claimDraft.isApprovedByPassenger ? { fontSize: 12, padding: '9px 14px' } : {
-                  fontSize: 12, padding: '9px 14px', background: 'rgba(148,163,184,0.20)',
+                className={claimDraft.isApprovedByPassenger ? 'ff-btn-success w-full sm:w-auto' : 'w-full sm:w-auto'}
+                style={claimDraft.isApprovedByPassenger ? { fontSize: 12, padding: '9px 14px', minHeight: 42 } : {
+                  fontSize: 12, padding: '9px 14px', minHeight: 42, background: 'rgba(148,163,184,0.20)',
                   color: 'var(--text-3)', border: 'none', borderRadius: 12, cursor: 'not-allowed',
-                  display: 'flex', alignItems: 'center', gap: 6,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
                 }}>
-                <Send style={{ width: 13, height: 13 }} />
-                Submit
+                <Send style={{ width: 13, height: 13, flexShrink: 0 }} />
+                <span>Submit</span>
               </button>
             </div>
           </div>
         ) : (
           <button id="prepare-draft-btn" type="button" onClick={onPrepareDraft}
-            className="ff-btn-primary" style={{ width: '100%', fontSize: 13 }}>
-            <Sparkles style={{ width: 15, height: 15, color: 'var(--amber)' }} />
-            Generate Claim Letter
+            className="ff-btn-primary" style={{ width: '100%', fontSize: 13, minHeight: 44 }}>
+            <Sparkles style={{ width: 15, height: 15, color: 'var(--amber)', flexShrink: 0 }} />
+            <span>Generate Claim Letter</span>
           </button>
         )}
       </div>

@@ -128,8 +128,7 @@ export const AICopilotChat: React.FC<AICopilotChatProps> = ({
   return (
     <div
       id="ai-copilot-chat-container"
-      className="ff-card"
-      style={{ padding: '18px 18px 16px', display: 'flex', flexDirection: 'column', height: 520 }}
+      className="ff-card h-[480px] sm:h-[520px] p-4 sm:p-[18px] flex flex-col"
     >
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, paddingBottom: 14, borderBottom: '1px solid rgba(148,163,184,0.15)', flexShrink: 0 }}>
@@ -138,14 +137,15 @@ export const AICopilotChat: React.FC<AICopilotChatProps> = ({
           background: 'var(--navy)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           boxShadow: '0 2px 8px rgba(30,41,59,0.20)',
+          flexShrink: 0,
         }}>
           <Bot style={{ width: 15, height: 15, color: '#F9F7F2' }} />
         </div>
-        <div>
-          <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em' }}>AI Copilot</div>
-          <div style={{ fontSize: 11, color: 'var(--text-2)' }}>Ask anything about your passenger rights</div>
+        <div className="min-w-0">
+          <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em' }} className="truncate">AI Copilot</div>
+          <div style={{ fontSize: 11, color: 'var(--text-2)' }} className="truncate">Ask anything about your passenger rights</div>
         </div>
-        <div className="ff-pulse" style={{ marginLeft: 'auto', width: 7, height: 7, borderRadius: '50%', background: 'var(--success)', boxShadow: '0 0 0 2px rgba(94,155,120,0.25)' }} />
+        <div className="ff-pulse" style={{ marginLeft: 'auto', width: 7, height: 7, borderRadius: '50%', background: 'var(--success)', boxShadow: '0 0 0 2px rgba(94,155,120,0.25)', flexShrink: 0 }} />
       </div>
 
       {/* Messages */}
@@ -161,8 +161,7 @@ export const AICopilotChat: React.FC<AICopilotChatProps> = ({
                 <Bot style={{ width: 12, height: 12, color: 'var(--navy)' }} />
               </div>
             )}
-            <div style={{
-              maxWidth: '82%',
+            <div className="max-w-[88%] sm:max-w-[82%]" style={{
               padding: '9px 12px',
               borderRadius: msg.role === 'user' ? '14px 14px 4px 14px' : '14px 14px 14px 4px',
               fontSize: 12, lineHeight: 1.6,
@@ -175,7 +174,7 @@ export const AICopilotChat: React.FC<AICopilotChatProps> = ({
               {msg.actionInvoked && (
                 <div style={{
                   marginTop: 8, paddingTop: 7, borderTop: '1px solid rgba(255,255,255,0.15)',
-                  display: 'flex', alignItems: 'center', gap: 5,
+                  display: 'flex', alignItems: 'center', gap: 5, flexWrap: 'wrap',
                 }}>
                   <span className="ff-tool-badge" style={{ background: msg.role === 'user' ? 'rgba(255,255,255,0.15)' : undefined }}>
                     <Terminal style={{ width: 10, height: 10 }} />
@@ -199,7 +198,7 @@ export const AICopilotChat: React.FC<AICopilotChatProps> = ({
         {isLoading && (
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <div style={{
-              width: 24, height: 24, borderRadius: 7,
+              width: 24, height: 24, borderRadius: 7, flexShrink: 0,
               background: 'rgba(201,221,234,0.30)', border: '1px solid rgba(157,189,212,0.30)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
@@ -226,7 +225,8 @@ export const AICopilotChat: React.FC<AICopilotChatProps> = ({
             onClick={() => handleSendMessage(qp.prompt)}
             style={{
               flexShrink: 0,
-              padding: '5px 11px',
+              padding: '6px 12px',
+              minHeight: 32,
               borderRadius: 99,
               background: 'rgba(201,221,234,0.25)',
               border: '1px solid rgba(157,189,212,0.30)',
@@ -252,13 +252,13 @@ export const AICopilotChat: React.FC<AICopilotChatProps> = ({
           onChange={(e) => setInputText(e.target.value)}
           placeholder="Ask about your rights or actions…"
           className="ff-input"
-          style={{ flex: 1, fontSize: 12 }}
+          style={{ flex: 1, fontSize: 12, minHeight: 42 }}
         />
         <button
           type="submit"
           disabled={!inputText.trim() || isLoading}
           style={{
-            width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+            width: 42, height: 42, borderRadius: 10, flexShrink: 0,
             background: inputText.trim() && !isLoading ? 'var(--navy)' : 'rgba(148,163,184,0.20)',
             border: 'none', cursor: inputText.trim() && !isLoading ? 'pointer' : 'default',
             display: 'flex', alignItems: 'center', justifyContent: 'center',

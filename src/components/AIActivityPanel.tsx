@@ -43,8 +43,8 @@ export const AIActivityPanel: React.FC<AIActivityPanelProps> = ({ logs, onClearL
   };
 
   return (
-    <div id="ai-activity-log-panel" className="bg-white border border-slate-200/80 rounded-xl p-5 sm:p-6 space-y-4 shadow-xs">
-      <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+    <div id="ai-activity-log-panel" className="bg-white border border-slate-200/80 rounded-xl p-4 sm:p-5 flex flex-col h-[480px] sm:h-[520px] shadow-xs">
+      <div className="flex items-center justify-between border-b border-slate-100 pb-3 shrink-0">
         <div className="flex items-center gap-2">
           <div>
             <h3 className="text-xs font-semibold text-slate-900 uppercase tracking-wider">
@@ -61,15 +61,15 @@ export const AIActivityPanel: React.FC<AIActivityPanelProps> = ({ logs, onClearL
             id="clear-activity-logs-btn"
             type="button"
             onClick={onClearLogs}
-            className="p-1 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+            className="p-2 min-h-[34px] text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
             title="Clear activity stream"
           >
-            <Trash2 className="w-3.5 h-3.5" />
+            <Trash2 className="w-4 h-4" />
           </button>
         )}
       </div>
 
-      <div className="space-y-2 max-h-72 overflow-y-auto pr-1 divide-y divide-slate-100">
+      <div className="flex-1 overflow-y-auto pr-1 divide-y divide-slate-100 no-scrollbar space-y-2 pt-2">
         {logs.length === 0 ? (
           <div className="p-4 text-center text-slate-400 text-xs font-mono">
             No tool activity logged yet. Modify a flight or run a quick test case to see live execution.

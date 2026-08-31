@@ -77,69 +77,69 @@ export const DemoClaimForm: React.FC<DemoClaimFormProps> = ({
         </div>
       ) : (
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <div>
               <label className="ff-label-field">Passenger Name</label>
               <input type="text" value={formData.passengerName}
                 onChange={(e) => onUpdateForm({ passengerName: e.target.value })}
-                required className="ff-input" />
+                required className="ff-input" style={{ minHeight: 42 }} />
             </div>
             <div>
               <label className="ff-label-field">Contact Email</label>
               <input type="email" value={formData.passengerEmail}
                 onChange={(e) => onUpdateForm({ passengerEmail: e.target.value })}
-                required className="ff-input" />
+                required className="ff-input" style={{ minHeight: 42 }} />
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+          <div className="grid grid-cols-1 xs:grid-cols-3 gap-2.5">
             <div>
-              <label className="ff-label-field">PNR / Booking Ref</label>
+              <label className="ff-label-field">PNR / Ref</label>
               <input type="text" value={formData.bookingReference}
                 onChange={(e) => onUpdateForm({ bookingReference: e.target.value })}
                 required className="ff-input"
-                style={{ fontFamily: 'JetBrains Mono, monospace', textTransform: 'uppercase' }} />
+                style={{ fontFamily: 'JetBrains Mono, monospace', textTransform: 'uppercase', minHeight: 42 }} />
             </div>
             <div>
               <label className="ff-label-field">Airline</label>
               <input type="text" value={formData.airline}
                 onChange={(e) => onUpdateForm({ airline: e.target.value })}
-                className="ff-input" />
+                className="ff-input" style={{ minHeight: 42 }} />
             </div>
             <div>
               <label className="ff-label-field">Flight No.</label>
               <input type="text" value={formData.flightNumber}
                 onChange={(e) => onUpdateForm({ flightNumber: e.target.value })}
                 className="ff-input"
-                style={{ fontFamily: 'JetBrains Mono, monospace', textTransform: 'uppercase' }} />
+                style={{ fontFamily: 'JetBrains Mono, monospace', textTransform: 'uppercase', minHeight: 42 }} />
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <div>
               <label className="ff-label-field">Route</label>
               <input type="text" value={formData.route} readOnly className="ff-input"
-                style={{ background: 'rgba(238,243,247,0.70)', color: 'var(--text-2)' }} />
+                style={{ background: 'rgba(238,243,247,0.70)', color: 'var(--text-2)', minHeight: 42 }} />
             </div>
             <div>
               <label className="ff-label-field">Claimed Amount</label>
               <input type="text" value={formData.claimAmount}
                 onChange={(e) => onUpdateForm({ claimAmount: e.target.value })}
-                className="ff-input" style={{ color: 'var(--success)', fontWeight: 700 }} />
+                className="ff-input" style={{ color: 'var(--success)', fontWeight: 700, minHeight: 42 }} />
             </div>
           </div>
 
           <div>
             <label className="ff-label-field">Approved Letter Body</label>
-            <textarea rows={5} value={formData.message}
+            <textarea rows={4} value={formData.message}
               onChange={(e) => onUpdateForm({ message: e.target.value })}
               className="ff-input"
               style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, lineHeight: 1.6, resize: 'vertical', height: 'auto' }} />
           </div>
 
-          <button id="simulate-claim-submit-btn" type="submit" className="ff-btn-success" style={{ width: '100%' }}>
-            <Send style={{ width: 14, height: 14 }} />
-            Simulate Claim Submission
+          <button id="simulate-claim-submit-btn" type="submit" className="ff-btn-success" style={{ width: '100%', minHeight: 44 }}>
+            <Send style={{ width: 14, height: 14, flexShrink: 0 }} />
+            <span>Simulate Claim Submission</span>
           </button>
         </form>
       )}

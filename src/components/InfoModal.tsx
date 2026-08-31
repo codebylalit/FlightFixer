@@ -79,16 +79,17 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose, defaultTa
             type="button"
             onClick={onClose}
             style={{
-              width: 30, height: 30,
+              width: 34, height: 34,
               borderRadius: 8,
               border: 'none',
               background: 'rgba(148, 163, 184, 0.14)',
               cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               color: 'var(--text-2)',
+              flexShrink: 0,
             }}
           >
-            <X style={{ width: 15, height: 15 }} />
+            <X style={{ width: 16, height: 16 }} />
           </button>
         </div>
 
@@ -96,11 +97,12 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose, defaultTa
         <div style={{
           display: 'flex',
           gap: 6,
-          padding: '10px 20px',
+          padding: '10px 16px',
           background: 'rgba(238, 243, 240, 0.60)',
           borderBottom: '1px solid rgba(148, 163, 184, 0.12)',
           flexShrink: 0,
-        }}>
+          overflowX: 'auto',
+        }} className="no-scrollbar">
           {[
             { id: 'about', label: 'About FlightClaims' },
             { id: 'rights', label: 'Passenger Rights' },
@@ -112,6 +114,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose, defaultTa
               onClick={() => setActiveTab(t.id as any)}
               style={{
                 padding: '6px 13px',
+                minHeight: 34,
                 borderRadius: 9999,
                 fontSize: 12,
                 fontWeight: 600,
@@ -120,6 +123,8 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose, defaultTa
                 background: activeTab === t.id ? 'var(--navy)' : 'transparent',
                 color: activeTab === t.id ? '#FFFFFF' : 'var(--text-2)',
                 transition: 'all 150ms ease',
+                whiteSpace: 'nowrap',
+                flexShrink: 0,
               }}
             >
               {t.label}

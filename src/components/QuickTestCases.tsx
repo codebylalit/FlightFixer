@@ -118,12 +118,12 @@ export const QuickTestCases: React.FC<QuickTestCasesProps> = ({ onApplyCase }) =
 
   return (
     <div id="quick-test-scenarios" style={{ marginBottom: 18 }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 10 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <Zap style={{ width: 13, height: 13, color: 'var(--amber)' }} />
+          <Zap style={{ width: 13, height: 13, color: 'var(--amber)', flexShrink: 0 }} />
           <span className="ff-label">Quick Scenarios</span>
         </div>
-        <span style={{ fontSize: 11, color: 'var(--text-3)' }}>Select to instantly test calculations</span>
+        <span style={{ fontSize: 11, color: 'var(--text-3)' }} className="hidden sm:inline">Select to instantly test calculations</span>
       </div>
       <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4 }} className="no-scrollbar">
         {testCases.map((tc) => (
@@ -137,24 +137,25 @@ export const QuickTestCases: React.FC<QuickTestCasesProps> = ({ onApplyCase }) =
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'flex-start',
-              gap: 4,
+              gap: 3,
               padding: '10px 14px',
               borderRadius: 14,
-              background: 'rgba(255,255,255,0.65)',
-              border: '1px solid rgba(255,255,255,0.70)',
+              background: 'rgba(255,255,255,0.75)',
+              border: '1px solid rgba(255,255,255,0.80)',
               backdropFilter: 'blur(10px)',
               cursor: 'pointer',
               transition: 'background 160ms, box-shadow 160ms, transform 140ms',
               boxShadow: '0 1px 8px rgba(23,32,51,0.05)',
               minWidth: 110,
+              minHeight: 44,
             }}
             onMouseEnter={e => {
-              e.currentTarget.style.background = 'rgba(255,255,255,0.90)';
+              e.currentTarget.style.background = 'rgba(255,255,255,0.95)';
               e.currentTarget.style.transform = 'translateY(-2px)';
               e.currentTarget.style.boxShadow = '0 4px 16px rgba(23,32,51,0.10)';
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.background = 'rgba(255,255,255,0.65)';
+              e.currentTarget.style.background = 'rgba(255,255,255,0.75)';
               e.currentTarget.style.transform = 'translateY(0)';
               e.currentTarget.style.boxShadow = '0 1px 8px rgba(23,32,51,0.05)';
             }}

@@ -466,43 +466,34 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                 {/* ── 1. Clean Minimal Search Bar ── */}
                 <form
                   onSubmit={handleHeroSearchSubmit}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    maxWidth: 600,
-                    width: '100%',
-                    margin: '0 auto',
-                    background: 'rgba(255, 255, 255, 0.90)',
-                    backdropFilter: 'blur(20px)',
-                    border: '1px solid rgba(255, 255, 255, 0.95)',
-                    borderRadius: 9999,
-                    padding: '6px 7px 6px 20px',
-                    boxShadow: '0 6px 28px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.03)',
-                    transition: 'all 200ms ease',
-                  }}
+                  className="flex flex-col xs:flex-row items-stretch xs:items-center max-w-[600px] w-full mx-auto bg-white/90 backdrop-blur-xl border border-white/95 rounded-2xl xs:rounded-full p-1.5 xs:p-1.5 xs:pl-5 shadow-lg gap-2"
                 >
-                  <Search style={{ width: 18, height: 18, color: 'var(--text-3)', flexShrink: 0, marginRight: 12 }} />
-                  <input
-                    type="text"
-                    value={heroSearch}
-                    onChange={e => setHeroSearch(e.target.value)}
-                    placeholder="Enter flight number or airline..."
-                    style={{
-                      flex: 1,
-                      border: 'none',
-                      outline: 'none',
-                      background: 'transparent',
-                      fontSize: 14.5,
-                      color: 'var(--text)',
-                      minWidth: 0,
-                    }}
-                  />
+                  <div className="flex items-center flex-1 px-3 xs:px-0 py-1 xs:py-0">
+                    <Search style={{ width: 18, height: 18, color: 'var(--text-3)', flexShrink: 0, marginRight: 10 }} />
+                    <input
+                      type="text"
+                      value={heroSearch}
+                      onChange={e => setHeroSearch(e.target.value)}
+                      placeholder="Enter flight number or airline..."
+                      style={{
+                        flex: 1,
+                        border: 'none',
+                        outline: 'none',
+                        background: 'transparent',
+                        fontSize: 14,
+                        color: 'var(--text)',
+                        minWidth: 0,
+                        minHeight: 40,
+                      }}
+                    />
+                  </div>
 
                   <button
                     type="submit"
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
+                      justifyContent: 'center',
                       gap: 7,
                       padding: '10px 22px',
                       borderRadius: 9999,
@@ -515,11 +506,12 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                       boxShadow: '0 2px 10px rgba(26, 35, 50, 0.25)',
                       transition: 'all 160ms ease',
                       flexShrink: 0,
+                      minHeight: 44,
                     }}
                     onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.02)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(26,35,50,0.35)'; }}
                     onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(26,35,50,0.25)'; }}
                   >
-                    Check compensation <ArrowRight style={{ width: 14, height: 14 }} />
+                    <span>Check compensation</span> <ArrowRight style={{ width: 14, height: 14, flexShrink: 0 }} />
                   </button>
                 </form>
 
@@ -528,7 +520,7 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                   <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-2)', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 12, textAlign: 'left' }}>
                     What happened to your flight?
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                  <div className="grid grid-cols-1 xs:grid-cols-2 gap-3">
                     {DISRUPTIONS.map(({ type, label, sub, icon: Icon, accent }) => (
                       <button
                         key={type}
@@ -536,8 +528,8 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                         type="button"
                         onClick={() => { onUpdate({ disruptionType: type }); setTimeout(() => setStep(2), 100); }}
                         style={{
-                          display: 'flex', alignItems: 'flex-start', gap: 13,
-                          padding: '15px 16px',
+                          display: 'flex', alignItems: 'flex-start', gap: 12,
+                          padding: '14px 15px',
                           borderRadius: 18,
                           border: '1.5px solid rgba(255,255,255,0.80)',
                           background: 'rgba(255,255,255,0.65)',
@@ -547,6 +539,7 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                           boxShadow: '0 2px 4px rgba(0,0,0,0.02), 0 6px 20px rgba(0,0,0,0.04)',
                           textAlign: 'left',
                           width: '100%',
+                          minHeight: 52,
                         }}
                         onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.92)'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.06), 0 12px 32px rgba(0,0,0,0.08)'; }}
                         onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.65)'; e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.02), 0 6px 20px rgba(0,0,0,0.04)'; }}
@@ -634,20 +627,24 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                     </button>
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: 10 }}>
-                    <Field label="Airline">
-                      <Inp id="airline-input" list="airlines-list" placeholder="e.g. IndiGo"
-                        value={flightCase.airline} onChange={e => onUpdate({ airline: e.target.value })}
-                        prefix={<Plane style={{ width: 12, height: 12 }} />} />
-                      <datalist id="airlines-list">{AIRLINES.map(a => <option key={a} value={a} />)}</datalist>
-                    </Field>
-                    <Field label="Flight No.">
-                      <Inp id="flight-number-input" placeholder="6E-204"
-                        value={flightCase.flightNumber}
-                        onChange={e => onUpdate({ flightNumber: e.target.value.toUpperCase() })}
-                        prefix={<Hash style={{ width: 12, height: 12 }} />}
-                        style={{ fontFamily: 'JetBrains Mono, monospace', textTransform: 'uppercase' }} />
-                    </Field>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                    <div className="sm:col-span-2">
+                      <Field label="Airline">
+                        <Inp id="airline-input" list="airlines-list" placeholder="e.g. IndiGo"
+                          value={flightCase.airline} onChange={e => onUpdate({ airline: e.target.value })}
+                          prefix={<Plane style={{ width: 12, height: 12 }} />} style={{ minHeight: 42 }} />
+                        <datalist id="airlines-list">{AIRLINES.map(a => <option key={a} value={a} />)}</datalist>
+                      </Field>
+                    </div>
+                    <div>
+                      <Field label="Flight No.">
+                        <Inp id="flight-number-input" placeholder="6E-204"
+                          value={flightCase.flightNumber}
+                          onChange={e => onUpdate({ flightNumber: e.target.value.toUpperCase() })}
+                          prefix={<Hash style={{ width: 12, height: 12 }} />}
+                          style={{ fontFamily: 'JetBrains Mono, monospace', textTransform: 'uppercase', minHeight: 42 }} />
+                      </Field>
+                    </div>
                   </div>
 
                   <Field label="From">
@@ -790,23 +787,23 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
 
                 {/* Details card */}
                 <div className="ff-float-card" style={{ padding: '20px 20px 22px', display: 'flex', flexDirection: 'column', gap: 13 }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     <Field label="Your Name">
                       <Inp id="passenger-name" placeholder="Rahul Sharma" value={flightCase.passengerName}
                         onChange={e => onUpdate({ passengerName: e.target.value })}
-                        prefix={<User style={{ width: 12, height: 12 }} />} />
+                        prefix={<User style={{ width: 12, height: 12 }} />} style={{ minHeight: 42 }} />
                     </Field>
                     <Field label="Booking Ref (PNR)">
                       <Inp id="booking-ref" placeholder="6E9K2A" value={flightCase.bookingReference}
                         onChange={e => onUpdate({ bookingReference: e.target.value.toUpperCase() })}
                         prefix={<Hash style={{ width: 12, height: 12 }} />}
-                        style={{ fontFamily: 'JetBrains Mono, monospace', textTransform: 'uppercase' }} />
+                        style={{ fontFamily: 'JetBrains Mono, monospace', textTransform: 'uppercase', minHeight: 42 }} />
                     </Field>
                   </div>
                   <Field label="Email" hint="(not shared, used only in your letter)">
                     <Inp id="passenger-email" type="email" placeholder="rahul@example.com" value={flightCase.passengerEmail}
                       onChange={e => onUpdate({ passengerEmail: e.target.value })}
-                      prefix={<Mail style={{ width: 12, height: 12 }} />} />
+                      prefix={<Mail style={{ width: 12, height: 12 }} />} style={{ minHeight: 42 }} />
                   </Field>
                 </div>
 
@@ -828,7 +825,7 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                       <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--text-3)', marginBottom: 3 }}>
                         Estimated compensation
                       </div>
-                      <div style={{ fontSize: 44, fontWeight: 900, color: 'var(--text)', letterSpacing: '-0.05em', lineHeight: 1, fontFamily: 'Inter, sans-serif' }}>
+                      <div className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight font-sans break-words">
                         {analysis.financialRecovery.formattedRange}
                       </div>
                       <div style={{ fontSize: 11.5, color: 'var(--text-2)', marginTop: 5 }}>

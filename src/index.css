@@ -244,3 +244,20 @@ textarea.ff-input { resize: vertical; }
 .ff-delay-2  { animation-delay: 0.16s; }
 .ff-delay-3  { animation-delay: 0.24s; }
 .ff-pulse    { animation: pulsedot 2s ease infinite; }
+
+/* ─── Mobile Scroll & Touch Target Utilities ─────────────────── */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 640px) {
+  button, input, select, textarea {
+    touch-action: manipulation;
+  }
+}
+
