@@ -260,7 +260,6 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
   };
 
 
-
   const selectedDisruption = DISRUPTIONS.find(d => d.type === flightCase.disruptionType)!;
 
   return (
@@ -288,32 +287,32 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
         flexDirection: 'column',
       }}>
 
-        {/* ── Floating Capsule Nav ─────────────────────────────── */}
+        {/* ── Floating Header Nav ──────────────────────────────── */}
         <header style={{
           position: 'sticky',
-          top: 14,
-          zIndex: 50,
+          top: 0,
+          zIndex: 40,
           width: '100%',
           display: 'flex',
           justifyContent: 'center',
-          padding: '0 16px',
+          padding: '14px 20px 0',
           pointerEvents: 'none',
         }}>
           <nav style={{
             pointerEvents: 'auto',
             width: '100%',
-            maxWidth: 640,
-            height: 48,
+            maxWidth: 1040,
+            height: 52,
             borderRadius: 9999,
-            background: 'rgba(255, 255, 255, 0.45)',
-            backdropFilter: 'blur(20px) saturate(1.6)',
-            WebkitBackdropFilter: 'blur(20px) saturate(1.6)',
-            border: '1px solid rgba(255, 255, 255, 0.75)',
-            boxShadow: '0 4px 24px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04)',
+            background: 'rgba(255, 255, 255, 0.55)',
+            backdropFilter: 'blur(24px) saturate(1.6)',
+            WebkitBackdropFilter: 'blur(24px) saturate(1.6)',
+            border: '1px solid rgba(255, 255, 255, 0.85)',
+            boxShadow: '0 4px 24px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: '0 8px 0 18px',
+            padding: '0 10px 0 22px',
             transition: 'all 200ms ease',
           }}>
             {/* Left: Brand */}
@@ -331,7 +330,7 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                   color: 'var(--text-2)',
                   fontSize: 13,
                   fontWeight: 600,
-                  padding: '4px 8px',
+                  padding: '4px 10px',
                   borderRadius: 9999,
                   transition: 'background 150ms',
                 }}
@@ -341,21 +340,21 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                 <ChevronLeft style={{ width: 15, height: 15 }} /> Back
               </button>
             ) : (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
                 <div style={{
-                  width: 26,
-                  height: 26,
-                  borderRadius: 8,
+                  width: 28,
+                  height: 28,
+                  borderRadius: 9,
                   background: 'var(--navy)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  boxShadow: '0 2px 6px rgba(26, 35, 50, 0.22)',
+                  boxShadow: '0 2px 8px rgba(26, 35, 50, 0.22)',
                   flexShrink: 0,
                 }}>
-                  <Plane style={{ width: 12, height: 12, color: '#F9F8F6', transform: 'rotate(-45deg)' }} />
+                  <Plane style={{ width: 13, height: 13, color: '#F9F8F6', transform: 'rotate(-45deg)' }} />
                 </div>
-                <span className="ff-display" style={{ fontSize: 17, color: 'var(--text)', fontStyle: 'italic', fontWeight: 400, letterSpacing: '-0.02em', lineHeight: 1 }}>
+                <span className="ff-display" style={{ fontSize: 18, color: 'var(--text)', fontStyle: 'italic', fontWeight: 400, letterSpacing: '-0.02em', lineHeight: 1 }}>
                   Flight<span style={{ fontStyle: 'normal', fontWeight: 600 }}>Claims</span>
                 </span>
               </div>
@@ -363,11 +362,11 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
 
             {/* Center: Nav links or Step indicator */}
             {step === 1 ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 16 }} className="hidden sm:flex">
+              <div style={{ display: 'flex', alignItems: 'center', gap: 24 }} className="hidden sm:flex">
                 <button
                   type="button"
                   onClick={() => openInfo('about')}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12.5, color: 'var(--text-2)', fontWeight: 500, padding: '4px 6px', borderRadius: 6, transition: 'color 140ms' }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--text-2)', fontWeight: 500, padding: '4px 8px', borderRadius: 6, transition: 'color 140ms' }}
                   onMouseEnter={e => e.currentTarget.style.color = 'var(--text)'}
                   onMouseLeave={e => e.currentTarget.style.color = 'var(--text-2)'}
                 >
@@ -376,7 +375,7 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                 <button
                   type="button"
                   onClick={() => openInfo('rights')}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12.5, color: 'var(--text-2)', fontWeight: 500, padding: '4px 6px', borderRadius: 6, transition: 'color 140ms' }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--text-2)', fontWeight: 500, padding: '4px 8px', borderRadius: 6, transition: 'color 140ms' }}
                   onMouseEnter={e => e.currentTarget.style.color = 'var(--text)'}
                   onMouseLeave={e => e.currentTarget.style.color = 'var(--text-2)'}
                 >
@@ -385,7 +384,7 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                 <button
                   type="button"
                   onClick={() => openInfo('how-it-works')}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12.5, color: 'var(--text-2)', fontWeight: 500, padding: '4px 6px', borderRadius: 6, transition: 'color 140ms' }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--text-2)', fontWeight: 500, padding: '4px 8px', borderRadius: 6, transition: 'color 140ms' }}
                   onMouseEnter={e => e.currentTarget.style.color = 'var(--text)'}
                   onMouseLeave={e => e.currentTarget.style.color = 'var(--text-2)'}
                 >
@@ -395,7 +394,7 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
             ) : (
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <Steps current={step} />
-                <span style={{ fontSize: 11, color: 'var(--text-3)', fontWeight: 500 }}>Step {step} of 3</span>
+                <span style={{ fontSize: 11.5, color: 'var(--text-3)', fontWeight: 500 }}>Step {step} of 3</span>
               </div>
             )}
 
@@ -405,25 +404,25 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                 type="button"
                 onClick={() => setScanModalOpen(true)}
                 style={{
-                  padding: '7px 15px',
+                  padding: '8px 18px',
                   borderRadius: 9999,
                   background: 'var(--navy)',
                   color: '#FFFFFF',
-                  fontSize: 12.5,
+                  fontSize: 13,
                   fontWeight: 600,
                   border: 'none',
                   cursor: 'pointer',
-                  boxShadow: '0 2px 8px rgba(26, 35, 50, 0.25)',
+                  boxShadow: '0 2px 10px rgba(26, 35, 50, 0.25)',
                   transition: 'all 160ms ease',
                   letterSpacing: '-0.01em',
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: 6,
+                  gap: 7,
                 }}
-                onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.03)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(26,35,50,0.32)'; }}
-                onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(26,35,50,0.25)'; }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.03)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(26,35,50,0.32)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(26,35,50,0.25)'; }}
               >
-                <Camera style={{ width: 13, height: 13 }} />
+                <Camera style={{ width: 14, height: 14 }} />
                 Scan ticket
               </button>
             </div>
@@ -431,33 +430,34 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
         </header>
 
         {/* ── Content ──────────────────────────────────────────── */}
-        <main style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '52px 20px 64px' }}>
-          <div style={{ width: '100%', maxWidth: 540 }}>
+        <main style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '64px 24px 80px' }}>
+          <div style={{ width: '100%', maxWidth: 720 }}>
 
             {/* ═══════════ STEP 1 — Hero + Disruption ══════════ */}
             {step === 1 && (
-              <div key="step1" className="ff-fadeup" style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+              <div key="step1" className="ff-fadeup" style={{ display: 'flex', flexDirection: 'column', gap: 36 }}>
 
                 {/* Hero text */}
                 <div style={{ textAlign: 'center' }}>
                   <div style={{
-                    display: 'inline-flex', alignItems: 'center', gap: 6,
-                    marginBottom: 16,
-                    padding: '5px 12px', borderRadius: 99,
-                    background: 'rgba(255,255,255,0.65)',
-                    border: '1px solid rgba(255,255,255,0.80)',
-                    fontSize: 11.5, color: 'var(--text-2)', fontWeight: 600,
-                    backdropFilter: 'blur(8px)',
+                    display: 'inline-flex', alignItems: 'center', gap: 7,
+                    marginBottom: 20,
+                    padding: '6px 14px', borderRadius: 99,
+                    background: 'rgba(255,255,255,0.70)',
+                    border: '1px solid rgba(255,255,255,0.90)',
+                    fontSize: 12, color: 'var(--text-2)', fontWeight: 600,
+                    backdropFilter: 'blur(10px)',
+                    boxShadow: '0 2px 10px rgba(0,0,0,0.03)',
                   }}>
-                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#5E9B78', display: 'block', flexShrink: 0 }} className="ff-pulse" />
+                    <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#5E9B78', display: 'block', flexShrink: 0 }} className="ff-pulse" />
                     DGCA · EU261 · UK261 — Instant calculation
                   </div>
 
-                  <h1 className="ff-display" style={{ fontSize: 'clamp(24px, 5.2vw, 38px)', color: 'var(--text)', marginBottom: 12, lineHeight: 1.15 }}>
-                    <span style={{ display: 'block', whiteSpace: 'nowrap' }}>Flight delayed or cancelled?</span>
-                    <em style={{ color: '#4A7FA0', fontStyle: 'italic', display: 'block', whiteSpace: 'nowrap' }}>Claim what airlines owe you.</em>
+                  <h1 className="ff-display" style={{ fontSize: 'clamp(34px, 5.8vw, 56px)', color: 'var(--text)', marginBottom: 16, lineHeight: 1.08 }}>
+                    <span style={{ display: 'block' }}>Flight delayed or cancelled?</span>
+                    <em style={{ color: '#4A7FA0', fontStyle: 'italic', display: 'block' }}>Claim what airlines owe you.</em>
                   </h1>
-                  <p style={{ fontSize: 13.5, color: 'var(--text-2)', lineHeight: 1.6, maxWidth: 430, margin: '0 auto' }}>
+                  <p style={{ fontSize: 15, color: 'var(--text-2)', lineHeight: 1.6, maxWidth: 520, margin: '0 auto' }}>
                     Free meals, hotel stays, 100% ticket refunds, and statutory cash payouts — get your formal demand letter in 60 seconds.
                   </p>
 
@@ -469,16 +469,19 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    background: 'rgba(255, 255, 255, 0.88)',
+                    maxWidth: 600,
+                    width: '100%',
+                    margin: '0 auto',
+                    background: 'rgba(255, 255, 255, 0.90)',
                     backdropFilter: 'blur(20px)',
                     border: '1px solid rgba(255, 255, 255, 0.95)',
                     borderRadius: 9999,
-                    padding: '5px 6px 5px 16px',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)',
+                    padding: '6px 7px 6px 20px',
+                    boxShadow: '0 6px 28px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.03)',
                     transition: 'all 200ms ease',
                   }}
                 >
-                  <Search style={{ width: 16, height: 16, color: 'var(--text-3)', flexShrink: 0, marginRight: 10 }} />
+                  <Search style={{ width: 18, height: 18, color: 'var(--text-3)', flexShrink: 0, marginRight: 12 }} />
                   <input
                     type="text"
                     value={heroSearch}
@@ -489,25 +492,23 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                       border: 'none',
                       outline: 'none',
                       background: 'transparent',
-                      fontSize: 13.5,
+                      fontSize: 14.5,
                       color: 'var(--text)',
                       minWidth: 0,
                     }}
                   />
-
-
 
                   <button
                     type="submit"
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: 6,
-                      padding: '9px 18px',
+                      gap: 7,
+                      padding: '10px 22px',
                       borderRadius: 9999,
                       background: 'var(--navy)',
                       color: '#FFFFFF',
-                      fontSize: 13,
+                      fontSize: 13.5,
                       fontWeight: 600,
                       border: 'none',
                       cursor: 'pointer',
@@ -518,16 +519,16 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                     onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.02)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(26,35,50,0.35)'; }}
                     onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(26,35,50,0.25)'; }}
                   >
-                    Check compensation <ArrowRight style={{ width: 13, height: 13 }} />
+                    Check compensation <ArrowRight style={{ width: 14, height: 14 }} />
                   </button>
                 </form>
 
                 {/* ── 2. Disruption reasons cards ── */}
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-2)', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 10, textAlign: 'left' }}>
+                <div style={{ maxWidth: 640, width: '100%', margin: '0 auto' }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-2)', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 12, textAlign: 'left' }}>
                     What happened to your flight?
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                     {DISRUPTIONS.map(({ type, label, sub, icon: Icon, accent }) => (
                       <button
                         key={type}
@@ -535,31 +536,31 @@ export const ClaimScreen: React.FC<ClaimScreenProps> = ({
                         type="button"
                         onClick={() => { onUpdate({ disruptionType: type }); setTimeout(() => setStep(2), 100); }}
                         style={{
-                          display: 'flex', alignItems: 'flex-start', gap: 11,
-                          padding: '13px 13px',
-                          borderRadius: 15,
-                          border: '1.5px solid rgba(255,255,255,0.75)',
-                          background: 'rgba(255,255,255,0.60)',
-                          backdropFilter: 'blur(12px)',
+                          display: 'flex', alignItems: 'flex-start', gap: 13,
+                          padding: '15px 16px',
+                          borderRadius: 18,
+                          border: '1.5px solid rgba(255,255,255,0.80)',
+                          background: 'rgba(255,255,255,0.65)',
+                          backdropFilter: 'blur(16px)',
                           cursor: 'pointer',
                           transition: 'all 160ms cubic-bezier(0.22,1,0.36,1)',
-                          boxShadow: '0 1px 3px rgba(0,0,0,0.03), 0 4px 14px rgba(0,0,0,0.04)',
+                          boxShadow: '0 2px 4px rgba(0,0,0,0.02), 0 6px 20px rgba(0,0,0,0.04)',
                           textAlign: 'left',
                           width: '100%',
                         }}
-                        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.90)'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.09)'; }}
-                        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.60)'; e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.03), 0 4px 14px rgba(0,0,0,0.04)'; }}
+                        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.92)'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.06), 0 12px 32px rgba(0,0,0,0.08)'; }}
+                        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.65)'; e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.02), 0 6px 20px rgba(0,0,0,0.04)'; }}
                       >
                         <div style={{
-                          width: 32, height: 32, borderRadius: 9, flexShrink: 0,
+                          width: 36, height: 36, borderRadius: 11, flexShrink: 0,
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          background: `${accent}20`, border: `1px solid ${accent}45`,
+                          background: `${accent}18`, border: `1px solid ${accent}40`,
                         }}>
-                          <Icon style={{ width: 15, height: 15, color: accent }} />
+                          <Icon style={{ width: 17, height: 17, color: accent }} />
                         </div>
                         <div style={{ minWidth: 0, flex: 1 }}>
-                          <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em', lineHeight: 1.2 }}>{label}</div>
-                          <div style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 3 }}>{sub}</div>
+                          <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em', lineHeight: 1.25 }}>{label}</div>
+                          <div style={{ fontSize: 11.5, color: 'var(--text-3)', marginTop: 3 }}>{sub}</div>
                         </div>
                       </button>
                     ))}
