@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { FlightCase, AnalysisResult, ClaimDraft } from './types';
 import { getAirportByIata } from './services/airportService';
 import { analyzeFlightDisruption } from './services/analysisService';
@@ -81,18 +82,21 @@ export function App() {
   };
 
   return (
-    <ClaimScreen
-      flightCase={flightCase}
-      analysis={analysis}
-      claimDraft={claimDraft}
-      isDraftOpen={isDraftOpen}
-      isGenerating={isGenerating}
-      onUpdate={handleUpdate}
-      onGenerate={handleGenerate}
-      onApprove={handleApprove}
-      onOpenDraft={() => setIsDraftOpen(true)}
-      onCloseDraft={() => setIsDraftOpen(false)}
-    />
+    <>
+      <ClaimScreen
+        flightCase={flightCase}
+        analysis={analysis}
+        claimDraft={claimDraft}
+        isDraftOpen={isDraftOpen}
+        isGenerating={isGenerating}
+        onUpdate={handleUpdate}
+        onGenerate={handleGenerate}
+        onApprove={handleApprove}
+        onOpenDraft={() => setIsDraftOpen(true)}
+        onCloseDraft={() => setIsDraftOpen(false)}
+      />
+      <Analytics />
+    </>
   );
 }
 
